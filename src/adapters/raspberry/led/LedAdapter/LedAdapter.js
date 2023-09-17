@@ -16,4 +16,9 @@ export default class LedAdapter {
         this.driver.switchOffLed()
         this.logger.log({level: 'info', message: 'LedAdapter.switchOffLed executed'})
     }
+
+    tearUpGpios() {
+        this.driver.tearUpGpios()
+        this.logger.log({level: 'info', message: 'LedAdapter.tearUpGpios executed'})
+    }
 }
