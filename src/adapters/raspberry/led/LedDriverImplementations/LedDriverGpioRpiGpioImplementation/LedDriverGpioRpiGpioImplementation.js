@@ -14,9 +14,11 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     start() {
+        const logger = this.logger
+
         try {
             gpio.setup(12, gpio.DIR_OUT, () => {
-                this.logger.log({
+                logger.log({
                     level: 'info',
                     message: `LedDriverGpioRpiGpioImplementation.construct set up pin 12`
                 })
@@ -24,7 +26,7 @@ export default class LedDriverGpioRpiGpioImplementation {
                 if (this.isLedToLit === false) gpio.write(12, true, function (err) {
                     if (err) throw err;
 
-                    this.logger.log({
+                    logger.log({
                         level: 'info',
                         message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin 12`
                     })
@@ -33,7 +35,7 @@ export default class LedDriverGpioRpiGpioImplementation {
                 if (this.isLedToLit === true) gpio.write(12, true, function (err) {
                     if (err) throw err;
 
-                    this.logger.log({
+                    logger.log({
                         level: 'info',
                         message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written false to pin 12`
                     })
@@ -41,14 +43,14 @@ export default class LedDriverGpioRpiGpioImplementation {
 
                 if(this.isGpioToTearUp) gpio.destroy((error) => {
                     if (error) throw error
-                    this.logger.log({
+                    logger.log({
                         level: 'info',
                         message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
                     })
                 });
             });
         } catch (error) {
-            this.logger.log({
+            logger.log({
                 level: 'error',
                 message: `LedDriverGpioRpiGpioImplementation error : `, error
             })
@@ -64,19 +66,6 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     tearUpGpios() {
-        try {
-            gpio.destroy((error) => {
-                if (error) throw error
-                this.logger.log({
-                    level: 'info',
-                    message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
-                })
-            });
-        } catch (error) {
-            this.logger.log({
-                level: 'error',
-                message: `LedDriverGpioRpiGpioImplementation.tearUpGpios error : `, error
-            })
-        }
+        this.isGpioToTearUp = true
     }
 }
