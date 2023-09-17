@@ -15,6 +15,8 @@ export default class LedController {
                 return
             case WSS_MESSAGE_SWITCH_OFF_LED: this.ledService.switchOffLed()
         }
+
+        this.ledService.tearUpGpios()
     }
 
     constructor({logger}) {

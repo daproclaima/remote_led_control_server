@@ -30,4 +30,8 @@ export default class LedService {
     switchOffLed() {
         this.ledAdapter?.switchOffLed()
     }
+
+    tearUpGpios() {
+        this.ledAdapter.tearUpGpios()
+    }
 }

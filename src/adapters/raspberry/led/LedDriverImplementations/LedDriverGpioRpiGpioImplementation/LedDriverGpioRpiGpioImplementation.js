@@ -33,4 +33,21 @@ export default class LedDriverGpioRpiGpioImplementation {
             })
         })
     }
+
+    tearUpGpios() {
+        try {
+            gpio.destroy((error) => {
+                if (error) throw error
+                this.logger.log({
+                    level: 'info',
+                    message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
+                })
+            });
+        } catch (error) {
+            this.logger.log({
+                level: 'error',
+                message: `LedDriverGpioRpiGpioImplementation.tearUpGpios error : `, error
+            })
+        }
+    }
 }
