@@ -1,41 +1,16 @@
-import {WebSocketServer} from 'ws';
+import {wssConfig} from "./src/configuration/wsServer/wssConfig.js";
+import WebSocketServer from "./src/webSocket/WebSocketServer.js";
+import WinstonLoggerImplementation from "./src/logger/loggerImplementations/WinstonLoggerImplementation.js";
+import {winstonConfiguration} from "./src/configuration/logger/winstonConfiguration.js";
+import WsWebSocketImplementation from "./src/webSocket/webSocketImplementations/WsWebSocketImplementation.js";
+import Logger from "./src/logger/Logger.js";
 
-const wsServer = new WebSocketServer({
-    port: 8080,
-    perMessageDeflate: {
-        zlibDeflateOptions: {
-            // See zlib defaults.
-            chunkSize: 1024,
-            memLevel: 7,
-            level: 3
-        },
-        zlibInflateOptions: {
-            chunkSize: 10 * 1024
-        },
-        // Other options settable:
-        clientNoContextTakeover: true, // Defaults to negotiated value.
-        serverNoContextTakeover: true, // Defaults to negotiated value.
-        serverMaxWindowBits: 10, // Defaults to negotiated value.
-        // Below options specified as default values.
-        concurrencyLimit: 10, // Limits zlib concurrency for perf.
-        threshold: 1024 // Size (in bytes) below which messages
-        // should not be compressed if context takeover is disabled.
-    }
-});
+const loggerImplementation = new WinstonLoggerImplementation({winstonConfiguration})
+const logger = new Logger({loggerImplementation})
 
-wsServer.on('connection', function connection(ws) {
-    ws.isAlive = true;
+const webSocketImplementation = new WsWebSocketImplementation({wssConfig, logger})
+const webSocketServer = new WebSocketServer({webSocketImplementation, logger})
 
-    ws.on('message', function switchOnLed(messageAsString) {
-        const message = JSON.parse(messageAsString);
-
-
-        if(message === 'switch_on_led') {
-            ws.send('led_switched_on')
-        }
-
-        if(message === 'switch_off_led') {
-            ws.send('led_switched_off')
-        }
-    })
-});
+webSocketServer.listen()
+    .prepareNextReply()
+    .reply()
