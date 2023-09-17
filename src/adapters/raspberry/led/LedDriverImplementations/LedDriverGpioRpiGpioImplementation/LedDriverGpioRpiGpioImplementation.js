@@ -11,7 +11,9 @@ export default class LedDriverGpioRpiGpioImplementation {
     constructor({logger}) {
         this.logger = logger
         this.driver = gpio
+    }
 
+    start() {
         try {
             gpio.setup(12, gpio.DIR_OUT, () => {
                 this.logger.log({

@@ -7,6 +7,11 @@ export default class LedAdapter {
         this.logger = logger
     }
 
+    start() {
+        this.driver.start()
+        this.logger.log({level: 'info', message: 'LedAdapter.start executed'})
+    }
+
     switchOnLed() {
         this.driver.switchOnLed()
         this.logger.log({level: 'info', message: 'LedAdapter.switchOnLed executed'})
