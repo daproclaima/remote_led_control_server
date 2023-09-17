@@ -1,6 +1,6 @@
-import WebSocketMessage from "./WebSocketMessage.js";
-import WebSocketReply from "./WebSocketReply.js";
-import {WSS_REPLY_EMPTY} from "../constants/WSS_REPLIES.js";
+import WebSocketMessage from "../WebSocketMessage/WebSocketMessage.js";
+import WebSocketReply from "../WebSocketReply/WebSocketReply.js";
+import Informant from "../../business/Informant/Informant.js";
 
 export default class WebSocketServer {
     logger = null
@@ -62,22 +62,12 @@ export default class WebSocketServer {
         return this
     }
 
-    prepareNextReply = () => {
-        const objectAcceptedMessages = {
-            [WebSocketMessage.switchOnLed]: WebSocketMessage.switchOnLed,
-            [WebSocketMessage.switchOffLed]: WebSocketMessage.switchOffLed
-        }
+    parseLastMessage = () => {
+        // 2 - security : is message clean
 
-        const objectRepliesForMessages = {
-            [WebSocketMessage.switchOnLed]: WebSocketReply.switchedOnLed,
-            [WebSocketMessage.switchOffLed]: WebSocketReply.switchedOffLed
-        }
-
-        console.log('this.lastMessage prepareNextReply : ', this.lastMessage)
-
-        if (objectAcceptedMessages[this.lastMessage]) {
-            this.nextReply = objectRepliesForMessages[this.lastMessage]
-            console.log('this.nextReply : ', this.nextReply)
+        // 1 - Logic : is such message expected and then reply
+        if (Informant.getIsMessageAcceptable(this.lastMessage)) {
+            this.nextReply = Informant.getReplyAccordingToMessage(this.lastMessage)
         }
 
         if (this.lastMessage === WebSocketMessage.switchOffLed) {
@@ -93,15 +83,12 @@ export default class WebSocketServer {
     }
 
     reply = (webSocketConnection) => {
-        let currentReply = WSS_REPLY_EMPTY
+        let currentReply = Informant.defaultReply
 
-        if(this.nextReply) {
+        if (this.nextReply) {
             currentReply = this.nextReply
             this.nextReply = null
         }
-
-        console.log('this.currentReply : ', currentReply)
-
 
         this.webSocketImplementation.reply(webSocketConnection, currentReply)
         this.lastReply = currentReply

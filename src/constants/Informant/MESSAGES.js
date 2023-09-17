@@ -1,3 +1,3 @@
-
 export const WSS_MESSAGE_SWITCH_ON_LED = 'SWITCH_ON_LED'
 export const WSS_MESSAGE_SWITCH_OFF_LED = 'SWITCH_OFF_LED'
+export const WSS_MESSAGE_TEST = 'TEST'

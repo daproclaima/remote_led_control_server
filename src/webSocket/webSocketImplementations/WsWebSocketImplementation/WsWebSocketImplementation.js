@@ -61,7 +61,7 @@ export default class WsWebSocketImplementation {
             webSocketConnection.on(MESSAGE, (data) => {
                 this.domain.lastMessage = JSON.parse(data);
 
-                this.domain.prepareNextReply()
+                this.domain.parseLastMessage()
                 this.domain.reply(webSocketConnection)
             })
 
@@ -71,12 +71,12 @@ export default class WsWebSocketImplementation {
             webSocketConnection.isAlive = false
 
             this.close()
-            console.info('WS server terminated')
+            this.logger.log({level: 'info', message: 'WS server terminated'})
         });
 
         this.server.on(ERROR, (errorObject) => {
-            this.lastError = JSON.parse(errorObject)
-            console.error(this.lastError)
+            this.domain.lastError = JSON.parse(errorObject)
+            this.logger.log({level: 'error', message: this.lastError})
         });
 
         return this
