@@ -10,7 +10,12 @@ export default class LedDriverGpioRpiGpioImplementation {
         this.logger = logger
         this.driver = gpio
 
-        gpio.setup(12, gpio.DIR_OUT);
+        gpio.setup(12, gpio.DIR_OUT, () => {
+            this.logger.log({
+                level: 'info',
+                message: `LedDriverGpioRpiGpioImplementation.construct set up pin 12`
+            })
+        });
     }
 
     switchOnLed() {
