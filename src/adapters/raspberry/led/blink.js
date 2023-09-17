@@ -26,12 +26,23 @@ gpio.setup(12, gpio.DIR_OUT); //use GPIO pin 4, and specify that it is output
 const blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
 
 function blinkLED() { //function to start blinking
-    const isLedLit = gpio.read(12)
+    let isLedLit = false
+
+    gpio.read(12, function (err, value) {
+        if (err) throw err
+
+        console.log('the value of pin 12 is : ', value)
+        isLedLit = value
+    })
 
     if (isLedLit === false) { //check the pin state, if the state is 0 (or off)
-        gpio.write(12, true) //set pin state to 1 (turn LED on)
+        gpio.write(12, true, function (err) {
+            if (err) throw err
+        }) //set pin state to 1 (turn LED on)
     } else {
-        gpio.write(12, false); //set pin state to 0 (turn LED off)
+        gpio.write(12, false, function (err) {
+            if (err) throw err
+        }); //set pin state to 0 (turn LED off)
     }
 }
 
