@@ -2,7 +2,7 @@ import {
     WSS_MESSAGE_SWITCH_OFF_LED,
     WSS_MESSAGE_SWITCH_ON_LED,
     WSS_MESSAGE_TEST
-} from "../../constants/Informant/MESSAGES.js";
+} from "../../../constants/Informant/MESSAGES.js";
 
 
 export default class WebSocketMessage {

@@ -1,6 +1,5 @@
-import WebSocketMessage from "../WebSocketMessage/WebSocketMessage.js";
-import WebSocketReply from "../WebSocketReply/WebSocketReply.js";
-import Informant from "../../business/Informant/Informant.js";
+import Informant from "../../../application/Informant/Informant.js";
+import LedController from "../../raspberry/led/LedController/LedController.js";
 
 export default class WebSocketServer {
     logger = null
@@ -56,8 +55,6 @@ export default class WebSocketServer {
     }
 
     listen = () => {
-        this.logger.log({level: 'info', message: 'WebSocketServer is listening'})
-
         this.webSocketImplementation.listen(this)
         return this
     }
@@ -66,17 +63,26 @@ export default class WebSocketServer {
         // 2 - security : is message clean
 
         // 1 - Logic : is such message expected and then reply
-        if (Informant.getIsMessageAcceptable(this.lastMessage)) {
-            this.nextReply = Informant.getReplyAccordingToMessage(this.lastMessage)
-        }
+        this.logger.log({
+            level: 'info',
+            message: 'WebSocketServer parseLastMessage this.lastMessage: ' + this.lastMessage,
+        })
 
-        if (this.lastMessage === WebSocketMessage.switchOffLed) {
-            this.nextReply = WebSocketReply.switchedOffLed
 
-            this.logger.log({
-                level: 'info',
-                message: WebSocketMessage.switchOffLed
-            })
+        const informant = new Informant({logger: this.logger})
+        informant.checkIsMessageAcceptable(this.lastMessage)
+
+        this.logger.log({
+            level: 'info',
+            message: 'WebSocketServer.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
+        })
+
+        if (informant.isMessageAcceptable) {
+            this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
+
+            const ledController = new LedController({logger: this.logger})
+
+            ledController.handleMessage(this.lastMessage)
         }
 
         return this

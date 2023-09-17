@@ -60,7 +60,6 @@ export default class WsWebSocketImplementation {
 
             webSocketConnection.on(MESSAGE, (data) => {
                 this.domain.lastMessage = JSON.parse(data);
-
                 this.domain.parseLastMessage()
                 this.domain.reply(webSocketConnection)
             })
@@ -86,8 +85,7 @@ export default class WsWebSocketImplementation {
         const jsonMessage = JSON.stringify(data)
 
         webSocketConnection?.send(jsonMessage)
-        this.logger.log({level: 'information', message: `WsWebSocketImplementation.socketInterlocutor replied ${jsonMessage}`})
-
+        this.logger.log({level: 'info', message: `WsWebSocketImplementation.reply sent: ${jsonMessage}`})
         return this
     }
 
