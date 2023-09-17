@@ -1,8 +1,8 @@
 import FeatureToggler from "../FeatureToggler/FeatureToggler.js";
 import {FEATURE_GPIO} from "../../constants/Features/FEATURES.js";
-import LedDriverGpioImplementation
-    from "../../adapters/raspberry/led/LedDriverImplementations/LedDriverGpioImplementation.js";
 import LedAdapter from "../../adapters/raspberry/led/LedAdapter/LedAdapter.js";
+import LedDriverGpioRpiGpioImplementation
+    from "../../adapters/raspberry/led/LedDriverImplementations/LedDriverGpioRpiGpioImplementation/LedDriverGpioRpiGpioImplementation.js";
 
 export default class LedService {
     logger = null
@@ -16,7 +16,7 @@ export default class LedService {
         const isFeatureGpioEnabled = featureToggle.getIsFeatureEnabled(FEATURE_GPIO)
 
         if (isFeatureGpioEnabled) {
-            const ledDriverGpio = new LedDriverGpioImplementation({logger: this.logger})
+            const ledDriverGpio = new LedDriverGpioRpiGpioImplementation({logger: this.logger})
             this.ledAdapter = new LedAdapter({logger: this.logger, ledDriverImplementation: ledDriverGpio})
         }
 

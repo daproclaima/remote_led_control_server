@@ -2,7 +2,7 @@
 
 import {Gpio} from "onoff";
 
-export default class LedDriverGpioImplementation {
+export default class LedDriverGpioOnOffImplementation {
     driver = null
     logger = null
 
@@ -20,4 +20,5 @@ export default class LedDriverGpioImplementation {
     switchOffLed() {
         if (this.led.readSync() === 1) this.led.writeSync(0)
     }
+
 }
