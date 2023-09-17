@@ -16,8 +16,8 @@ export default class LedService {
         const isFeatureGpioEnabled = featureToggle.getIsFeatureEnabled(FEATURE_GPIO)
 
         if (isFeatureGpioEnabled) {
-            const ledDriverGpio = new LedDriverGpioRpiGpioImplementation({logger: this.logger})
-            this.ledAdapter = new LedAdapter({logger: this.logger, ledDriverImplementation: ledDriverGpio})
+            const ledDriverGpio = new LedDriverGpioRpiGpioImplementation({logger})
+            this.ledAdapter = new LedAdapter({logger, ledDriverImplementation: ledDriverGpio})
             this.ledAdapter.start()
         }
 
