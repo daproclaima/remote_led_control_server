@@ -7,11 +7,14 @@ export default class FeatureToggler {
         [FEATURE_GPIO]: process.env.OS_TYPE === OS_TYPE
     }
 
-    get features() {
-        return this.features
-    }
-
     setFeature(featureName, value) {
         if (this.features[featureName] !== undefined) this.features[featureName] = value
     }
+
+    getIsFeatureEnabled(featureName) {
+        return this.features[featureName]
+    }
+
+    constructor(props) {}
+
 }
