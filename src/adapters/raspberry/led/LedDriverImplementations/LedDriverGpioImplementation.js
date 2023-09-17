@@ -6,7 +6,7 @@ export default class LedDriverGpioImplementation {
     driver = null
     logger = null
 
-    led = new Gpio(12, 'out')
+    led = new Gpio(23, 'out')
 
     constructor({logger}) {
         this.logger = logger
