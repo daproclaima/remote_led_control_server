@@ -48,8 +48,12 @@ function blinkLED() { //function to start blinking
 
 function endBlink() { //function to stop blinking
     clearInterval(blinkInterval); // Stop blink intervals
-    gpio.write(12, false); // Turn LED off
-    gpio.destroy(); // Unexport GPIO to free resources
+    gpio.write(12, false, err => {
+        if (err) throw err
+    }); // Turn LED off
+    gpio.destroy(() => {
+        console.log('All pins unexported');
+    }); // Unexport GPIO to free resources
 }
 
 setTimeout(endBlink, 5000); //stop blinking after 5 seconds
