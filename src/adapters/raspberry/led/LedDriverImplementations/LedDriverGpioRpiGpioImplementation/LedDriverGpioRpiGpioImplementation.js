@@ -16,7 +16,7 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     switchOnLed() {
-        if (!this.#isLedLit && !this.isGpioToTearUp) {
+        if (!this.isGpioToTearUp) {
             const callback = (gpioSession) => {
                 gpioSession.write(this.PIN_12, true, function (err) {
                     if (err) throw err
@@ -27,7 +27,7 @@ export default class LedDriverGpioRpiGpioImplementation {
                     message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written false to pin 12`
                 })
 
-                this.#setIsLedLit(gpioSession)
+                // this.#setIsLedLit(gpioSession)
                 this.#listenOnUncaughtException()
                 this.#listenOnExit(gpioSession)
             }
@@ -37,7 +37,7 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     switchOffLed(gpioSession) {
-        // if (this.#isLedLit && !this.isGpioToTearUp) {
+        if (!this.isGpioToTearUp) {
             const callback = () => {
                 gpioSession.write(this.PIN_12, true, function (err) {
                     if (err) throw err;
@@ -48,13 +48,13 @@ export default class LedDriverGpioRpiGpioImplementation {
                     message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin ${this.PIN_12}`
                 })
 
-                this.#setIsLedLit(gpioSession)
+                // this.#setIsLedLit(gpioSession)
                 this.#listenOnUncaughtException()
                 this.#listenOnExit(gpioSession)
             }
 
             this.#gpioExecute(callback)
-        // }
+        }
     }
 
     tearUpGpios(gpioSessionFromGpioExecuteMethod) {
