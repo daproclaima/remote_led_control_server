@@ -86,14 +86,18 @@ export default class WebSocketServer {
             ledController.handleMessage(this.lastMessage)
             const isLedLit = ledController.isLedLit
 
-            const informantReply = informant.getReplyAccordingToMessage(this.lastMessage)
-            this.nextReply = informantReply
+            this.logger.log({
+                level: 'info',
+                message: 'WebSocketServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
+            })
 
-            if(this.lastMessage === WebSocketMessage.switchOnLed && isLedLit === false) {
+            this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
+
+            if (this.lastMessage === WebSocketMessage.switchOnLed && isLedLit === false) {
                 this.nextReply = WSS_REPLY_FAILED_SWITCH_ON_LED
             }
 
-            if(this.lastMessage === WebSocketMessage.switchOffLed && isLedLit === true) {
+            if (this.lastMessage === WebSocketMessage.switchOffLed && isLedLit === true) {
                 this.nextReply = WSS_REPLY_FAILED_SWITCH_OFF_LED
             }
         }
@@ -104,8 +108,8 @@ export default class WebSocketServer {
     reply = (webSocketConnection) => {
         let currentReply = Informant.defaultReply
 
-        if(!currentReply) {
-            throw new Error (Errors.WebSocketServer.EMPTY_INFORMANT_REPLY.code)
+        if (!currentReply) {
+            throw new Error(Errors.WebSocketServer.EMPTY_INFORMANT_REPLY.code)
         }
 
         if (this.nextReply) {
