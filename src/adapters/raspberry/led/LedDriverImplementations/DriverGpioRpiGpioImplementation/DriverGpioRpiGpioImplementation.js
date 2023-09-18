@@ -114,9 +114,9 @@ export default class DriverGpioRpiGpioImplementation {
                 message: 'LedController.listenOnUncaughtException Caught exception : ' + err
             });
 
-            this.#isExceptionOccured = true;
-
-            process.exit();
+            // this.#isExceptionOccured = true;
+            //
+            // process.exit();
         });
     }
 
