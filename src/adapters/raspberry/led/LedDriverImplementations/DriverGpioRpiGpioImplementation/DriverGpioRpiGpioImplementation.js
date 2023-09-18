@@ -16,7 +16,7 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     switchOnLed() {
-        if (this.#isLedLit === false && this.#isExceptionOccured === false) {
+        if (this.#isExceptionOccured === false) {
             const callback = (gpioSession) => {
                 this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
                 this.#setIsLedLit(gpioSession)
@@ -31,7 +31,7 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     switchOffLed() {
-        if (this.#isLedLit === true && this.#isExceptionOccured === false) {
+        if (this.#isExceptionOccured === false) {
             const callback = gpioSession => {
                 this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: false})
 
