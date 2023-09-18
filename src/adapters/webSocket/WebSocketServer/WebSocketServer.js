@@ -84,20 +84,20 @@ export default class WebSocketServer {
             const ledController = new LedController({logger: this.logger})
 
             ledController.handleMessage(this.lastMessage)
-            const bitLedLit = ledController.bitLedLit
+            const isLedLit = ledController.isLedLit
 
             this.logger.log({
                 level: 'info',
-                message: 'WebSocketServer.parseLastMessage ledController.bitLedLit : ' + ledController.bitLedLit
+                message: 'WebSocketServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
             })
 
             this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
 
-            if (this.lastMessage === WebSocketMessage.switchOnLed && bitLedLit === 0) {
+            if (this.lastMessage === WebSocketMessage.switchOnLed && isLedLit === false) {
                 this.nextReply = WSS_REPLY_FAILED_SWITCH_ON_LED
             }
 
-            if (this.lastMessage === WebSocketMessage.switchOffLed && bitLedLit === 1) {
+            if (this.lastMessage === WebSocketMessage.switchOffLed && isLedLit === true) {
                 this.nextReply = WSS_REPLY_FAILED_SWITCH_OFF_LED
             }
         }

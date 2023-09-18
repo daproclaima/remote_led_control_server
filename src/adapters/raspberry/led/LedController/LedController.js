@@ -4,10 +4,10 @@ import WebSocketMessage from "../../../webSocket/WebSocketMessage/WebSocketMessa
 export default class LedController {
     logger = null
 
-    bitLedLit = null
+    isLedLit = null
 
-    get bitLedLit() {
-        return this.bitLedLit
+    get isLedLit() {
+        return this.isLedLit
     }
 
     handleMessage = (data) => {
@@ -18,10 +18,10 @@ export default class LedController {
 
         switch (data) {
             case WebSocketMessage.switchOnLed:
-                this.bitLedLit = this.ledService.switchOnLed()
+                this.isLedLit = this.ledService.switchOnLed()
                 break
             case WebSocketMessage.switchOffLed:
-                this.bitLedLit = this.ledService.switchOffLed()
+                this.isLedLit = this.ledService.switchOffLed()
                 break
             case WebSocketMessage.terminateGpioLed:
                 this.ledService.tearUpGpios()

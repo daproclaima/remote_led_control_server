@@ -30,16 +30,16 @@ gpio.setMode(gpio.MODE_RPI);
 const blinkInterval = setInterval(blinkLED, 250); //run the blinkLED function every 250ms
 
 function blinkLED() { //function to start blinking
-    let bitLedLit = false
+    let isLedLit = false
 
     gpio.read(PIN_12, function (err, value) {
         if (err) throw err
 
         console.log(`the value of pin ${PIN_12} is : ${value}`)
-        bitLedLit = value
+        isLedLit = value
     })
 
-    if (bitLedLit === false) { //check the pin state, if the state is 0 (or off)
+    if (isLedLit === false) { //check the pin state, if the state is 0 (or off)
         gpio.write(PIN_12, true, function (err) {
             if (err) throw err
         }) //set pin state to 1 (turn LED on)
