@@ -16,17 +16,11 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     switchOnLed() {
-        if (!this.isGpioToTearUp && this.#isLedLit === false) {
+        if (this.#isLedLit === false) {
             const callback = (gpioSession) => {
                 gpioSession.write(this.PIN_12, true, function (err) {
                     if (err) throw err
                 })
-
-                this.logger.log({
-                    level: 'info',
-                    message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written false to pin 12`
-                })
-
                 this.#setIsLedLit(gpioSession)
                 this.#listenOnUncaughtException()
                 this.#listenOnExit(gpioSession)
@@ -37,7 +31,7 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     switchOffLed() {
-        if (!this.isGpioToTearUp && this.#isLedLit === true) {
+        if (this.#isLedLit === true) {
             const callback = gpioSession => {
                 this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
 
@@ -55,12 +49,19 @@ export default class DriverGpioRpiGpioImplementation {
 
         const callback = gpioSession => {
             gpioSession = gpioSessionFromGpioExecuteMethod ?? gpioSession
+
             gpioSession.destroy((error) => {
-                if (error) throw error
-                this.logger.log({
-                    level: 'info',
-                    message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
-                })
+                if (error) {
+                    this.logger.log({
+                        level: 'error',
+                        message: `LedDriverGpioRpiGpioImplementation.tearUpGpios error : ${error}`
+                    })
+                } else {
+                    this.logger.log({
+                        level: 'info',
+                        message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
+                    })
+                }
             });
         }
 
@@ -85,7 +86,7 @@ export default class DriverGpioRpiGpioImplementation {
         } catch (error) {
             logger.log({
                 level: 'error',
-                message: `LedDriverGpioRpiGpioImplementation error : `, error
+                message: `LedDriverGpioRpiGpioImplementation.#gpioExecute error : ${error}`
             })
         }
     }
@@ -96,7 +97,7 @@ export default class DriverGpioRpiGpioImplementation {
 
             this.logger.log({
                 level: 'error',
-                message: 'LedController.handleMessage Caught exception : ' + err
+                message: 'LedController.listenOnUncaughtException Caught exception : ' + err
             });
 
             this.#isExceptionOccured = true;
@@ -111,11 +112,11 @@ export default class DriverGpioRpiGpioImplementation {
             if (this.#isExceptionOccured) {
                 this.logger.log({
                     level: 'info',
-                    message: 'LedController.handleMessage Exception occured'
+                    message: 'LedController.#listenOnExit Exception occured'
                 });
-            } else this.logger.log({level: 'info', message: 'LedController.handleMessage Kill signal received'});
+            } else this.logger.log({level: 'info', message: 'LedController.listenOnExit Kill signal received'});
 
-            this.tearUpGpios()
+            this.tearUpGpios(gpioSession)
         });
     }
 
@@ -124,22 +125,31 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     #writeInGpioPin = ({gpioSession, pinId, pinValue}) => {
-        gpioSession.write(pinId, pinValue, function (err) {
-            if (err) throw err;
+        gpioSession.write(pinId, pinValue, (err) => {
+            if (err) {
+                this.logger.log({
+                    level: 'error',
+                    message: `LedController.#writeInGpioPin Exception occured: ${err}`
+                });
+            }
+
+            this.logger.log({
+                level: 'info',
+                message: `LedDriverGpioRpiGpioImplementation.#writeInGpioPin wrote ${pinValue} to pin ${pinId}`
+            })
         });
     }
 
     #readFromGpioPin = ({gpioSession, pinId}) => {
         let pinValue = null
+
         gpioSession.read(pinId, (err, value) => {
             if (err) throw err
 
             pinValue = value
-            this.logger.log({level: 'info', message: `the value of pin ${pinId} is : ${value}`})
+            this.logger.log({level: 'info', message: `the value of pin ${pinId} is: ${value}`})
         })
 
         return pinValue
     }
-
-
 }
