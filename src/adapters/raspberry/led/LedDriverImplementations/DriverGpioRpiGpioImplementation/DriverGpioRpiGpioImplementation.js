@@ -5,7 +5,7 @@ import gpio from 'rpi-gpio'
 export default class DriverGpioRpiGpioImplementation {
     #driver = null
     logger = null
-    #bitLedLit = false
+    #bitLedLit = 0
     isGpioToTearUp = false
     PIN_12 = 12
     #isExceptionOccured = false
