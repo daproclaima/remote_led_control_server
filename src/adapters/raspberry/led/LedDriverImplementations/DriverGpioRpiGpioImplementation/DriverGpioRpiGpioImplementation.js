@@ -17,19 +17,20 @@ export default class DriverGpioRpiGpioImplementation {
 
     switchOnLed() {
         if (this.#isExceptionOccured === false) {
-            const callback = (gpioSession) => {
-                const isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
-
-                if(isLedLit === false) {
-                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
-                    this.#setIsLedLit(gpioSession)
+            const callbackForGpioExecute = (gpioSession) => {
+                const callback = (gpioSession, value) => {
+                    if (value === false) {
+                        this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
+                        this.#setIsLedLit(gpioSession)
+                    }
+                    this.#listenOnUncaughtException()
+                    this.#listenOnExit(gpioSession)
                 }
 
-                this.#listenOnUncaughtException()
-                this.#listenOnExit(gpioSession)
+                this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12, callback})
             }
 
-            this.#gpioExecute(callback)
+            this.#gpioExecute(callbackForGpioExecute)
         }
 
         return this.#isLedLit
@@ -37,19 +38,21 @@ export default class DriverGpioRpiGpioImplementation {
 
     switchOffLed() {
         if (this.#isExceptionOccured === false) {
-            const callback = gpioSession => {
-                const isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
+            const callbackForGpioExecute = gpioSession => {
+                const callback = (gpioSession, value) => {
+                    if (value === true) {
+                        this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: false})
+                        this.#setIsLedLit(gpioSession)
+                    }
 
-                if(isLedLit === true) {
-                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: false})
-                    this.#setIsLedLit(gpioSession)
+                    this.#listenOnUncaughtException()
+                    this.#listenOnExit(gpioSession)
                 }
 
-                this.#listenOnUncaughtException()
-                this.#listenOnExit(gpioSession)
+                this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12, callback})
             }
 
-            this.#gpioExecute(callback)
+            this.#gpioExecute(callbackForGpioExecute)
         }
 
         return this.#isLedLit
@@ -151,7 +154,7 @@ export default class DriverGpioRpiGpioImplementation {
         });
     }
 
-    #readFromGpioPin = ({gpioSession, pinId}) => {
+    #readFromGpioPin = ({gpioSession, pinId, callback}) => {
         let pinValue = null
 
         gpioSession.read(pinId, (err, value) => {
@@ -159,6 +162,8 @@ export default class DriverGpioRpiGpioImplementation {
 
             pinValue = value
             this.logger.log({level: 'info', message: `the value of pin ${pinId} is: ${value}`})
+
+            if (callback) callback(gpioSession, value)
         })
 
         return pinValue
