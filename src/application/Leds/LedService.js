@@ -18,7 +18,6 @@ export default class LedService {
         if (isFeatureGpioEnabled) {
             const ledDriverGpio = new LedDriverGpioRpiGpioImplementation({logger})
             this.ledAdapter = new LedAdapter({logger, ledDriverImplementation: ledDriverGpio})
-            this.ledAdapter.start()
         }
 
         this.logger = logger

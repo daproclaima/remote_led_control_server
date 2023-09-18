@@ -7,32 +7,34 @@ export default class LedDriverGpioRpiGpioImplementation {
     logger = null
     isLedToLit = false
     isGpioToTearUp = false
+    PIN_12 = 12
 
     constructor({logger}) {
         this.logger = logger
         this.driver = gpio
     }
 
-    start() {
+    listen() {
         const logger = this.logger
+        const ledDriver = this
 
         try {
-            gpio.setup(12, gpio.DIR_OUT, () => {
+            gpio.setup(ledDriver.PIN_12, gpio.DIR_OUT, () => {
                 logger.log({
                     level: 'info',
-                    message: `LedDriverGpioRpiGpioImplementation.construct set up pin 12`
+                    message: `LedDriverGpioRpiGpioImplementation.construct set up pin ${ledDriver.PIN_12}`
                 })
 
-                if (this.isLedToLit === false) gpio.write(12, true, function (err) {
+                if (ledDriver.isLedToLit === false) gpio.write(ledDriver.PIN_12, true, function (err) {
                     if (err) throw err;
 
                     logger.log({
                         level: 'info',
-                        message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin 12`
+                        message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin ${ledDriver.PIN_12}`
                     })
                 });
 
-                if (this.isLedToLit === true) gpio.write(12, true, function (err) {
+                if (ledDriver.isLedToLit === true) gpio.write(ledDriver.PIN_12, true, function (err) {
                     if (err) throw err;
 
                     logger.log({
@@ -41,7 +43,7 @@ export default class LedDriverGpioRpiGpioImplementation {
                     })
                 })
 
-                if(this.isGpioToTearUp) gpio.destroy((error) => {
+                if(ledDriver.isGpioToTearUp) gpio.destroy((error) => {
                     if (error) throw error
                     logger.log({
                         level: 'info',
@@ -59,13 +61,16 @@ export default class LedDriverGpioRpiGpioImplementation {
 
     switchOnLed() {
         this.isLedToLit = true
+        this.listen()
     }
 
     switchOffLed() {
         this.isLedToLit = false
+        this.listen()
     }
 
     tearUpGpios() {
         this.isGpioToTearUp = true
+        this.listen()
     }
 }
