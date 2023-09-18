@@ -4,10 +4,13 @@ import WebSocketMessage from "../../../webSocket/WebSocketMessage/WebSocketMessa
 export default class LedController {
     logger = null
 
-    handleMessage = (data) => {
-        const ledController = this
-        let isExceptionOccured = false;
+    isLedLit = null
 
+    get isLedLit() {
+        return this.isLedLit
+    }
+
+    handleMessage = (data) => {
         // https://github.com/winstonjs/winston#logging-levels
         this.logger.log({level: 'info', message: 'LedController.handleMessage data : ' + data})
 
@@ -15,10 +18,10 @@ export default class LedController {
 
         switch (data) {
             case WebSocketMessage.switchOnLed:
-                this.ledService.switchOnLed()
+                this.isLedLit = this.ledService.switchOnLed()
                 break
             case WebSocketMessage.switchOffLed:
-                this.ledService.switchOffLed()
+                this.isLedLit = this.ledService.switchOffLed()
                 break
             case WebSocketMessage.terminateGpioLed:
                 this.ledService.tearUpGpios()

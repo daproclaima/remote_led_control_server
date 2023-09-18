@@ -22,11 +22,11 @@ export default class LedService {
     }
 
     switchOnLed() {
-        this.ledAdapter?.switchOnLed()
+        return this.ledAdapter?.switchOnLed()
     }
 
     switchOffLed() {
-        this.ledAdapter?.switchOffLed()
+        return this.ledAdapter?.switchOffLed()
     }
 
     tearUpGpios() {

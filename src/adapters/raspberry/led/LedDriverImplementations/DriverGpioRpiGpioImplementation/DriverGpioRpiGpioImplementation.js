@@ -28,6 +28,8 @@ export default class DriverGpioRpiGpioImplementation {
 
             this.#gpioExecute(callback)
         }
+
+        return this.#isLedLit
     }
 
     switchOffLed() {
@@ -42,6 +44,8 @@ export default class DriverGpioRpiGpioImplementation {
 
             this.#gpioExecute(callback)
         }
+
+        return this.#isLedLit
     }
 
     tearUpGpios(gpioSessionFromGpioExecuteMethod) {

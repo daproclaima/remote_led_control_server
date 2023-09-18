@@ -1,6 +1,8 @@
 import Informant from "../../../application/Informant/Informant.js";
 import LedController from "../../raspberry/led/LedController/LedController.js";
 import Errors from "../../../constants/Errors/Errors.js";
+import WebSocketMessage from "../WebSocketMessage/WebSocketMessage.js";
+import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../../constants/Informant/REPLIES.js";
 
 export default class WebSocketServer {
     logger = null
@@ -79,11 +81,21 @@ export default class WebSocketServer {
         })
 
         if (informant.isMessageAcceptable) {
-            this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
-
             const ledController = new LedController({logger: this.logger})
 
             ledController.handleMessage(this.lastMessage)
+            const isLedLit = ledController.isLedLit
+
+            const informantReply = informant.getReplyAccordingToMessage(this.lastMessage)
+            this.nextReply = informantReply
+
+            if(this.lastMessage === WebSocketMessage.switchOnLed && isLedLit === false) {
+                this.nextReply = WSS_REPLY_FAILED_SWITCH_ON_LED
+            }
+
+            if(this.lastMessage === WebSocketMessage.switchOffLed && isLedLit === true) {
+                this.nextReply = WSS_REPLY_FAILED_SWITCH_OFF_LED
+            }
         }
 
         return this

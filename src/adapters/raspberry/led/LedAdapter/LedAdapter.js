@@ -8,13 +8,16 @@ export default class LedAdapter {
     }
 
     switchOnLed() {
-        this.driver.switchOnLed()
+        const isLedLit = this.driver.switchOnLed()
         this.logger.log({level: 'info', message: 'LedAdapter.switchOnLed executed'})
+
+        return isLedLit
     }
 
     switchOffLed() {
-        this.driver.switchOffLed()
+        const isLedLit = this.driver.switchOffLed()
         this.logger.log({level: 'info', message: 'LedAdapter.switchOffLed executed'})
+        return isLedLit
     }
 
     tearUpGpios() {
