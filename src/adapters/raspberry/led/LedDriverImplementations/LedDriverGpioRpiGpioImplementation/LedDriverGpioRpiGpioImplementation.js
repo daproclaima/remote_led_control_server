@@ -52,8 +52,8 @@ export default class LedDriverGpioRpiGpioImplementation {
                 message: `LedDriverGpioRpiGpioImplementation.construct set up pin ${this.PIN_12}`
             })
 
-            while (!this.isGpioToTearUp) {
-                while (this.#isLedToLit === false) {
+            if (!this.isGpioToTearUp) {
+                if (this.#isLedToLit === false) {
                     this.#setLedOff(this.#gpio)
 
                     this.#isLoggedInfoLedOn = true
@@ -71,7 +71,7 @@ export default class LedDriverGpioRpiGpioImplementation {
                     this.#listenOnExit(this.#gpio)
                 }
 
-                while (this.#isLedToLit === true) {
+                if (this.#isLedToLit === true) {
                     this.#setLedOn(this.#gpio)
 
                     this.#isLoggedInfoLedOff = true

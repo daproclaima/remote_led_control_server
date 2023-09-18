@@ -14,13 +14,13 @@ export default class LedController {
         this.ledService = new LedService({logger: this.logger})
 
         switch (data) {
-            case [WebSocketMessage.switchOnLed]:
+            case WebSocketMessage.switchOnLed:
                 this.ledService.switchOnLed()
                 break
-            case [WebSocketMessage.switchOffLed]:
+            case WebSocketMessage.switchOffLed:
                 this.ledService.switchOffLed()
                 break
-            case [WebSocketMessage.terminateGpioLed]:
+            case WebSocketMessage.terminateGpioLed:
                 this.ledService.tearUpGpios()
                 break;
             default:
