@@ -5,6 +5,7 @@ export default class LedController {
     logger = null
 
     handleMessage = (data) => {
+        const ledController = this
         let exceptionOccured = false;
 
         // https://github.com/winstonjs/winston#logging-levels
@@ -23,7 +24,7 @@ export default class LedController {
         process.on('uncaughtException', function (err) {
             console.log('Caught exception: ' + err);
 
-            this.logger.log({level: 'error', message: 'LedController.handleMessage Caught exception : ' + err});
+            ledController.logger.log({level: 'error', message: 'LedController.handleMessage Caught exception : ' + err});
 
             exceptionOccured = true;
 
@@ -31,13 +32,13 @@ export default class LedController {
         });
 
         process.on('exit', function (code) {
-            if (exceptionOccured) this.logger.log({
+            if (exceptionOccured) ledController.logger.log({
                 level: 'info',
                 message: 'LedController.handleMessage Exception occured'
             });
-            else this.logger.log({level: 'info', message: 'LedController.handleMessage Kill signal received'});
+            else ledController.logger.log({level: 'info', message: 'LedController.handleMessage Kill signal received'});
 
-            this.ledService.tearUpGpios();
+            ledController.ledService.tearUpGpios();
         });
     }
 
