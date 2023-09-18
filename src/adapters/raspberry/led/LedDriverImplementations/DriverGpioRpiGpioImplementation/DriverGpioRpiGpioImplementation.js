@@ -103,7 +103,7 @@ export default class DriverGpioRpiGpioImplementation {
     }
 
     #listenOnUncaughtException = () => {
-        process.on('uncaughtException', err => {
+        process.once('uncaughtException', err => {
             console.log('Caught exception: ' + err);
 
             this.logger.log({
@@ -119,7 +119,7 @@ export default class DriverGpioRpiGpioImplementation {
 
     #listenOnExit = (gpioSession) => {
         // code can be a param for the callback
-        process.on('exit', () => {
+        process.once('exit', () => {
             if (this.#isExceptionOccured) {
                 this.logger.log({
                     level: 'info',
