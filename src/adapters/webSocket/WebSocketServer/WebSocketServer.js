@@ -1,6 +1,6 @@
 import Informant from "../../../application/Informant/Informant.js";
 import LedController from "../../raspberry/led/LedController/LedController.js";
-import Errors from "../../../constants/Errors/ERRORS.js";
+import Errors from "../../../constants/Errors/Errors.js";
 
 export default class WebSocketServer {
     logger = null
