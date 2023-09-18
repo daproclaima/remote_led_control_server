@@ -1,5 +1,6 @@
 import Informant from "../../../application/Informant/Informant.js";
 import LedController from "../../raspberry/led/LedController/LedController.js";
+import Errors from "../../../constants/Errors/ERRORS.js";
 
 export default class WebSocketServer {
     logger = null
@@ -90,6 +91,10 @@ export default class WebSocketServer {
 
     reply = (webSocketConnection) => {
         let currentReply = Informant.defaultReply
+
+        if(!currentReply) {
+            throw new Error (Errors.WebSocketServer.EMPTY_INFORMANT_REPLY.code)
+        }
 
         if (this.nextReply) {
             currentReply = this.nextReply

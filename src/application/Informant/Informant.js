@@ -11,7 +11,7 @@ export default class Informant {
 
     reply = null
 
-    defaultReply = WSS_REPLY_UNEXPECTED_MESSAGE
+    static defaultReply = WSS_REPLY_UNEXPECTED_MESSAGE
 
     logger = null
 
