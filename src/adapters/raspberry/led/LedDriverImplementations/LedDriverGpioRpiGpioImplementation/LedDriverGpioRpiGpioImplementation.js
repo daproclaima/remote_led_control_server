@@ -25,31 +25,44 @@ export default class LedDriverGpioRpiGpioImplementation {
                     message: `LedDriverGpioRpiGpioImplementation.construct set up pin ${ledDriver.PIN_12}`
                 })
 
-                if (ledDriver.isLedToLit === false) gpio.write(ledDriver.PIN_12, true, function (err) {
-                    if (err) throw err;
+                while(true) {
 
-                    logger.log({
-                        level: 'info',
-                        message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin ${ledDriver.PIN_12}`
-                    })
-                });
+                    let isLoggedInfoLedOn = false
+                    while (ledDriver.isLedToLit === false) {
+                        gpio.write(ledDriver.PIN_12, true, function (err) {
+                            if (err) throw err;
 
-                if (ledDriver.isLedToLit === true) gpio.write(ledDriver.PIN_12, true, function (err) {
-                    if (err) throw err;
+                            isLoggedInfoLedOn = true
 
-                    logger.log({
-                        level: 'info',
-                        message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written false to pin 12`
-                    })
-                })
+                            if (!isLoggedInfoLedOn) logger.log({
+                                level: 'info',
+                                message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin ${ledDriver.PIN_12}`
+                            })
+                        });
+                    }
 
-                if(ledDriver.isGpioToTearUp) gpio.destroy((error) => {
-                    if (error) throw error
-                    logger.log({
-                        level: 'info',
-                        message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
-                    })
-                });
+                    let isLoggedInfoLedOff = false
+                    while (ledDriver.isLedToLit === true) {
+                        gpio.write(ledDriver.PIN_12, true, function (err) {
+                            if (err) throw err;
+
+                            isLoggedInfoLedOff = true
+
+                            if (!isLoggedInfoLedOff) logger.log({
+                                level: 'info',
+                                message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written false to pin 12`
+                            })
+                        })
+                    }
+
+                    if (ledDriver.isGpioToTearUp) gpio.destroy((error) => {
+                        if (error) throw error
+                        logger.log({
+                            level: 'info',
+                            message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
+                        })
+                    });
+                }
             });
         } catch (error) {
             logger.log({
