@@ -10,9 +10,7 @@ export default class LedService {
     ledAdapter = null
 
     constructor({logger}) {
-
         const featureToggle = new FeatureToggler()
-
         const isFeatureGpioEnabled = featureToggle.getIsFeatureEnabled(FEATURE_GPIO)
 
         if (isFeatureGpioEnabled) {

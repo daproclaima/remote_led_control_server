@@ -4,5 +4,5 @@ import WebSocketReply from "../../adapters/webSocket/WebSocketReply/WebSocketRep
 export const objectRepliesForMessages = {
     [WebSocketMessage.switchOnLed]: WebSocketReply.switchedOnLed,
     [WebSocketMessage.switchOffLed]: WebSocketReply.switchedOffLed,
-    [WebSocketMessage.test]: WebSocketReply.test
+    [WebSocketMessage.terminateGpioLed]: WebSocketReply.terminatedGpioLed
 }

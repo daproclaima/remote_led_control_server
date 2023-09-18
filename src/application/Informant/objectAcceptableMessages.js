@@ -3,5 +3,5 @@ import WebSocketMessage from "../../adapters/webSocket/WebSocketMessage/WebSocke
 export const objectAcceptableMessages = {
     [WebSocketMessage.switchOnLed]: WebSocketMessage.switchOnLed,
     [WebSocketMessage.switchOffLed]: WebSocketMessage.switchOffLed,
-    [WebSocketMessage.test]: WebSocketMessage.test
+    [WebSocketMessage.terminateGpioLed]: WebSocketMessage.terminateGpioLed
 }
