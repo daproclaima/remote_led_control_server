@@ -8,7 +8,6 @@ export default class LedDriverGpioRpiGpioImplementation {
     #isLedLit = false
     isGpioToTearUp = false
     PIN_12 = 12
-    #gpioSession = null
     #isExceptionOccured = false
 
     constructor({logger}) {
@@ -58,10 +57,11 @@ export default class LedDriverGpioRpiGpioImplementation {
         }
     }
 
-    tearUpGpios() {
+    tearUpGpios(gpioSessionFromGpioExecuteMethod) {
         this.isGpioToTearUp = true
 
         const callback = gpioSession => {
+            gpioSession = gpioSessionFromGpioExecuteMethod ?? gpioSession
             gpioSession.destroy((error) => {
                 if (error) throw error
                 this.logger.log({
@@ -77,15 +77,17 @@ export default class LedDriverGpioRpiGpioImplementation {
     #gpioExecute = callback => {
         const logger = this.logger
         try {
-            this.#driver.setup(this.PIN_12, this.#driver.DIR_OUT, () => {
+            const gpioSession = this.#driver
+
+            gpioSession.setup(this.PIN_12, gpioSession.DIR_OUT, () => {
                 this.logger.log({
                     level: 'info',
                     message: `LedDriverGpioRpiGpioImplementation.construct set up pin ${this.PIN_12}`
                 })
 
-                callback(this.#driver)
+                callback(gpioSession)
 
-                if (this.isGpioToTearUp) this.#destroy(this.#gpioSession)
+                if (this.isGpioToTearUp) this.tearUpGpios(gpioSession)
             });
         } catch (error) {
             logger.log({
