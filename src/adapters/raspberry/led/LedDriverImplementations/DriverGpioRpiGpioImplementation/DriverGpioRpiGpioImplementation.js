@@ -5,7 +5,7 @@ import gpio from 'rpi-gpio'
 export default class DriverGpioRpiGpioImplementation {
     #driver = null
     logger = null
-    #isLedLit = false
+    #bitLedLit = false
     isGpioToTearUp = false
     PIN_12 = 12
     #isExceptionOccured = false
@@ -18,11 +18,11 @@ export default class DriverGpioRpiGpioImplementation {
     switchOnLed() {
         if (this.#isExceptionOccured === false) {
             const callback = (gpioSession) => {
-                const isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
+                const bitLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
 
-                if(isLedLit === true) {
-                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
-                    this.#setIsLedLit(gpioSession)
+                if(bitLedLit === 0) {
+                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: 1})
+                    this.#setBitLedLit(gpioSession)
                 }
 
                 this.#listenOnUncaughtException()
@@ -32,17 +32,17 @@ export default class DriverGpioRpiGpioImplementation {
             this.#gpioExecute(callback)
         }
 
-        return this.#isLedLit
+        return this.#bitLedLit
     }
 
     switchOffLed() {
         if (this.#isExceptionOccured === false) {
             const callback = gpioSession => {
-                const isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
+                const bitLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
 
-                if(isLedLit === false) {
-                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: false})
-                    this.#setIsLedLit(gpioSession)
+                if(bitLedLit === 1) {
+                    this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: 0})
+                    this.#setBitLedLit(gpioSession)
                 }
 
                 this.#listenOnUncaughtException()
@@ -52,7 +52,7 @@ export default class DriverGpioRpiGpioImplementation {
             this.#gpioExecute(callback)
         }
 
-        return this.#isLedLit
+        return this.#bitLedLit
     }
 
     tearUpGpios(gpioSessionFromGpioExecuteMethod) {
@@ -131,8 +131,8 @@ export default class DriverGpioRpiGpioImplementation {
         });
     }
 
-    #setIsLedLit = (gpioSession) => {
-        this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
+    #setBitLedLit = (gpioSession) => {
+        this.#bitLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
     }
 
     #writeInGpioPin = ({gpioSession, pinId, pinValue}) => {
