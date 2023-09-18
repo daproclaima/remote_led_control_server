@@ -2,7 +2,7 @@
 
 import gpio from 'rpi-gpio'
 
-export default class LedDriverGpioRpiGpioImplementation {
+export default class DriverGpioRpiGpioImplementation {
     #driver = null
     logger = null
     #isLedLit = false
@@ -39,14 +39,7 @@ export default class LedDriverGpioRpiGpioImplementation {
     switchOffLed(gpioSession) {
         if (!this.isGpioToTearUp) {
             const callback = () => {
-                gpioSession.write(this.PIN_12, true, function (err) {
-                    if (err) throw err;
-                });
-
-                this.logger.log({
-                    level: 'info',
-                    message: `LedDriverGpioRpiGpioImplementation.switchOnLed Written true to pin ${this.PIN_12}`
-                })
+                this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
 
                 // this.#setIsLedLit(gpioSession)
                 this.#listenOnUncaughtException()
@@ -127,11 +120,26 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     #setIsLedLit = (gpioSession) => {
-        gpioSession.read(this.PIN_12, (err, value) => {
+        this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12})
+    }
+
+    #writeInGpioPin = ({gpioSession, pinId, pinValue}) => {
+        gpioSession.write(pinId, pinValue, function (err) {
+            if (err) throw err;
+        });
+    }
+
+    #readFromGpioPin = ({gpioSession, pinId}) => {
+        let pinValue = null
+        gpioSession.read(pinId, (err, value) => {
             if (err) throw err
 
-            this.logger.log({level: 'info', message: `the value of pin ${this.PIN_12} is : ${value}`})
-            this.#isLedLit = value
+            pinValue = value
+            this.logger.log({level: 'info', message: `the value of pin ${pinId} is : ${value}`})
         })
+
+        return pinValue
     }
+
+
 }
