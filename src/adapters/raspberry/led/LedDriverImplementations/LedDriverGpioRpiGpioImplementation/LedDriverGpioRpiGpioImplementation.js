@@ -37,7 +37,7 @@ export default class LedDriverGpioRpiGpioImplementation {
     }
 
     switchOffLed(gpioSession) {
-        if (this.#isLedLit && !this.isGpioToTearUp) {
+        // if (this.#isLedLit && !this.isGpioToTearUp) {
             const callback = () => {
                 gpioSession.write(this.PIN_12, true, function (err) {
                     if (err) throw err;
@@ -54,7 +54,7 @@ export default class LedDriverGpioRpiGpioImplementation {
             }
 
             this.#gpioExecute(callback)
-        }
+        // }
     }
 
     tearUpGpios(gpioSessionFromGpioExecuteMethod) {
