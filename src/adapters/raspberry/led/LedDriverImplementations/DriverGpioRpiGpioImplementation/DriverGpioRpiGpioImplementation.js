@@ -36,9 +36,9 @@ export default class DriverGpioRpiGpioImplementation {
         }
     }
 
-    switchOffLed(gpioSession) {
+    switchOffLed() {
         if (!this.isGpioToTearUp) {
-            const callback = () => {
+            const callback = gpioSession => {
                 this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
 
                 // this.#setIsLedLit(gpioSession)
