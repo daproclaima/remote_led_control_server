@@ -62,13 +62,14 @@ export default class LedDriverGpioRpiGpioImplementation {
     #openSession = () => {
         const logger = this.logger
         try {
-            this.#driver.setup(this.PIN_12, this.#driver.DIR_OUT, () => {
+            const gpioSession = structuredClone(this.#driver)
+            gpioSession.setup(this.PIN_12, this.#driver.DIR_OUT, () => {
                 this.logger.log({
                     level: 'info',
                     message: `LedDriverGpioRpiGpioImplementation.construct set up pin ${this.PIN_12}`
                 })
 
-                this.#gpioSession = this.#driver
+                this.#gpioSession = gpioSession
 
                 if (this.isGpioToTearUp) this.#destroy(this.#gpioSession)
             });
