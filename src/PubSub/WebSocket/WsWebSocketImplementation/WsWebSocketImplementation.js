@@ -69,7 +69,7 @@ export default class WsWebSocketImplementation {
         this.server.on(CLOSE, (webSocketConnection) => {
             webSocketConnection.isAlive = false
 
-            this.close()
+            this.closeConnection()
             this.logger.log({level: 'info', message: 'WS server terminated'})
         });
 
@@ -89,11 +89,11 @@ export default class WsWebSocketImplementation {
         return this
     }
 
-    // close = () => {
-    //     this.socketInterlocutor.terminate()
-    //
-    //     return this
-    // }
+    closeConnection = () => {
+        this.server.terminate()
+
+        return this
+    }
 
     constructor({wssConfig, logger}) {
         this.server = new WebSocketServer(wssConfig);

@@ -68,7 +68,7 @@ export default class PubSubServer {
         // 1 - Logic : is such message expected and then reply
         this.logger.log({
             level: 'info',
-            message: 'WebSocketServer parseLastMessage this.lastMessage: ' + this.lastMessage,
+            message: 'PubSubServer parseLastMessage : ' + this.lastMessage,
         })
 
 
@@ -77,7 +77,7 @@ export default class PubSubServer {
 
         this.logger.log({
             level: 'info',
-            message: 'WebSocketServer.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
+            message: 'PubSubServer.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
         })
 
         if (informant.isMessageAcceptable) {
@@ -88,7 +88,7 @@ export default class PubSubServer {
 
             this.logger.log({
                 level: 'info',
-                message: 'WebSocketServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
+                message: 'PubSubServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
             })
 
             this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
@@ -105,7 +105,7 @@ export default class PubSubServer {
         return this
     }
 
-    reply = (webSocketConnection) => {
+    reply = (pubSubConnection) => {
         let currentReply = Informant.defaultReply
 
         if (!currentReply) {
@@ -117,14 +117,14 @@ export default class PubSubServer {
             this.nextReply = null
         }
 
-        this.pubSubImplementation.reply(webSocketConnection, currentReply)
+        this.pubSubImplementation.reply(pubSubConnection, currentReply)
         this.lastReply = currentReply
 
         return this
     }
 
-    close = () => {
-        this.pubSubImplementation.close()
+    closeConnection = () => {
+        this.pubSubImplementation.closeConnection()
 
         return this
     }

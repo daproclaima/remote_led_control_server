@@ -123,8 +123,8 @@ export default class WebSocketServer {
         return this
     }
 
-    close = () => {
-        this.webSocketImplementation.close()
+    closeConnection = () => {
+        this.webSocketImplementation.closeConnection()
 
         return this
     }

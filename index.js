@@ -5,19 +5,15 @@ import {winstonConfiguration} from "./src/Logger/WinstonImplementation/winstonCo
 import WsWebSocketImplementation
     from "./src/PubSub/WebSocket/WsWebSocketImplementation/WsWebSocketImplementation.js";
 import LoggerFacade from "./src/Logger/LoggerFacade.js";
+import {Application} from "./src/application/Application.js";
 
 try {
 // https://github.com/winstonjs/winston#logging-levels
     const loggerImplementation = new WinstonLoggerImplementation({winstonConfiguration})
-    const logger = new LoggerFacade({loggerImplementation})
-
     const webSocketImplementation = new WsWebSocketImplementation({wssConfig, logger})
-    const webSocketServer = new WebSocketServer({webSocketImplementation, logger})
 
-
-    webSocketServer.listen()
-        .parseLastMessage()
-        .reply()
+    const application = new Application({loggerImplementation, pubSubImplementation: webSocketImplementation})
+    application.start();
 } catch (error) {
-    console.error('index.js websocket server : ', error)
+    console.error('index.js: ', error)
 }
