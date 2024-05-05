@@ -4,7 +4,7 @@ import Errors from "../Errors/Errors.js";
 import PubSubMessage from "./PubSubMessage.js";
 import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "./Informant/REPLIES.js";
 
-export default class PubSubServer {
+export default class PubSubServerFacade {
     logger = null
     pubSubImplementation = null
     lastMessage = null
@@ -68,7 +68,7 @@ export default class PubSubServer {
         // 1 - Logic : is such message expected and then reply
         this.logger.log({
             level: 'info',
-            message: 'PubSubServer parseLastMessage : ' + this.lastMessage,
+            message: 'PubSubServerFacade parseLastMessage : ' + this.lastMessage,
         })
 
 
@@ -77,7 +77,7 @@ export default class PubSubServer {
 
         this.logger.log({
             level: 'info',
-            message: 'PubSubServer.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
+            message: 'PubSubServerFacade.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
         })
 
         if (informant.isMessageAcceptable) {
@@ -88,7 +88,7 @@ export default class PubSubServer {
 
             this.logger.log({
                 level: 'info',
-                message: 'PubSubServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
+                message: 'PubSubServerFacade.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
             })
 
             this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)

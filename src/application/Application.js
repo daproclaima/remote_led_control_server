@@ -1,10 +1,10 @@
 import LoggerFacade from "../Logger/LoggerFacade.js";
-import PubSubServer from "../PubSub/PubSubServer.js";
+import PubSubServerFacade from "../PubSub/PubSubServerFacade.js";
 
 export class Application {
     constructor({loggerImplementation, pubSubImplementation}) {
         this.logger = new LoggerFacade({loggerImplementation})
-        this.pubSubServer = new PubSubServer({pubSubImplementation, loggerImplementation: this.logger})
+        this.pubSubServer = new PubSubServerFacade({pubSubImplementation, loggerImplementation: this.logger})
     }
 
     logger = null;
