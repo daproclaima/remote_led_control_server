@@ -1,6 +1,6 @@
 import FeatureToggler from "../FeatureToggler/FeatureToggler.js";
 import {FEATURE_GPIO} from "../FeatureToggler/FEATURES.js";
-import LedFacade from "./LedFacade/LedFacade.js";
+import LedFacade from "./LedFacade.js";
 import DriverGpioRpiGpioImplementation
     from "../GPIO/DriverGpioRpiGpioImplementation/DriverGpioRpiGpioImplementation.js";
 
