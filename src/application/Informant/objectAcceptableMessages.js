@@ -1,7 +1,7 @@
-import WebSocketMessage from "../../PubSub/WebSocket/WebSocketMessage/WebSocketMessage.js";
+import PubSubMessage from "../../PubSub/PubSubMessage/PubSubMessage.js";
 
 export const objectAcceptableMessages = {
-    [WebSocketMessage.switchOnLed]: WebSocketMessage.switchOnLed,
-    [WebSocketMessage.switchOffLed]: WebSocketMessage.switchOffLed,
-    [WebSocketMessage.terminateGpioLed]: WebSocketMessage.terminateGpioLed
+    [PubSubMessage.switchOnLed]: PubSubMessage.switchOnLed,
+    [PubSubMessage.switchOffLed]: PubSubMessage.switchOffLed,
+    [PubSubMessage.terminateGpioLed]: PubSubMessage.terminateGpioLed
 }

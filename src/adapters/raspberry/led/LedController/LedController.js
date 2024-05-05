@@ -1,5 +1,5 @@
 import LedService from "../../../../application/Leds/LedService.js";
-import WebSocketMessage from "../../../../PubSub/WebSocket/WebSocketMessage/WebSocketMessage.js";
+import PubSubMessage from "../../../../PubSub/PubSubMessage/PubSubMessage.js";
 
 export default class LedController {
     logger = null
@@ -17,13 +17,13 @@ export default class LedController {
         this.ledService = new LedService({logger: this.logger})
 
         switch (data) {
-            case WebSocketMessage.switchOnLed:
+            case PubSubMessage.switchOnLed:
                 this.isLedLit = this.ledService.switchOnLed()
                 break
-            case WebSocketMessage.switchOffLed:
+            case PubSubMessage.switchOffLed:
                 this.isLedLit = this.ledService.switchOffLed()
                 break
-            case WebSocketMessage.terminateGpioLed:
+            case PubSubMessage.terminateGpioLed:
                 this.ledService.tearUpGpios()
                 break;
             default:

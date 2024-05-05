@@ -1,12 +1,12 @@
-import Informant from "../../../application/Informant/Informant.js";
-import LedController from "../../../adapters/raspberry/led/LedController/LedController.js";
-import Errors from "../../../constants/Errors/Errors.js";
-import PubSubMessage from "../../PubSubMessage/PubSubMessage.js";
-import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../../constants/Informant/REPLIES.js";
+import Informant from "../../application/Informant/Informant.js";
+import LedController from "../../adapters/raspberry/led/LedController/LedController.js";
+import Errors from "../../constants/Errors/Errors.js";
+import PubSubMessage from "../PubSubMessage/PubSubMessage.js";
+import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../constants/Informant/REPLIES.js";
 
-export default class WebSocketServer {
+export default class PubSubServer {
     logger = null
-    webSocketImplementation = null
+    pubSubImplementation = null
     lastMessage = null
     lastRequest = null
     lastClient = null
@@ -14,7 +14,7 @@ export default class WebSocketServer {
     nextReply = null
 
     get lastMessage() {
-        return this.webSocketImplementation.lastMessage
+        return this.pubSubImplementation.lastMessage
     }
 
     set lastMessage(message) {
@@ -22,7 +22,7 @@ export default class WebSocketServer {
     }
 
     get lastRequest() {
-        return this.webSocketImplementation.lastRequest
+        return this.pubSubImplementation.lastRequest
     }
 
     set lastRequest(request) {
@@ -30,7 +30,7 @@ export default class WebSocketServer {
     }
 
     get lastClient() {
-        return this.webSocketImplementation.lastClient
+        return this.pubSubImplementation.lastClient
     }
 
     set lastClient(client) {
@@ -38,7 +38,7 @@ export default class WebSocketServer {
     }
 
     get lastError() {
-        return this.webSocketImplementation.lastError
+        return this.pubSubImplementation.lastError
     }
 
     set nextReply(reply) {
@@ -58,7 +58,7 @@ export default class WebSocketServer {
     }
 
     listen = () => {
-        this.webSocketImplementation.listen(this)
+        this.pubSubImplementation.listen(this)
         return this
     }
 
@@ -117,20 +117,20 @@ export default class WebSocketServer {
             this.nextReply = null
         }
 
-        this.webSocketImplementation.reply(webSocketConnection, currentReply)
+        this.pubSubImplementation.reply(webSocketConnection, currentReply)
         this.lastReply = currentReply
 
         return this
     }
 
     close = () => {
-        this.webSocketImplementation.close()
+        this.pubSubImplementation.close()
 
         return this
     }
 
-    constructor({webSocketImplementation, logger}) {
-        this.webSocketImplementation = webSocketImplementation
+    constructor({pubSubImplementation, logger}) {
+        this.pubSubImplementation = pubSubImplementation
         this.logger = logger
     }
 }
