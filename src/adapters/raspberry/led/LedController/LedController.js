@@ -1,5 +1,5 @@
 import LedService from "../../../../application/Leds/LedService.js";
-import WebSocketMessage from "../../../webSocket/WebSocketMessage/WebSocketMessage.js";
+import WebSocketMessage from "../../../../PubSub/WebSocket/WebSocketMessage/WebSocketMessage.js";
 
 export default class LedController {
     logger = null

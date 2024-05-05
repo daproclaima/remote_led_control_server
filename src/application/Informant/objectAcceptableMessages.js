@@ -1,4 +1,4 @@
-import WebSocketMessage from "../../adapters/webSocket/WebSocketMessage/WebSocketMessage.js";
+import WebSocketMessage from "../../PubSub/WebSocket/WebSocketMessage/WebSocketMessage.js";
 
 export const objectAcceptableMessages = {
     [WebSocketMessage.switchOnLed]: WebSocketMessage.switchOnLed,

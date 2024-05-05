@@ -1,5 +1,5 @@
-import WebSocketMessage from "../../adapters/webSocket/WebSocketMessage/WebSocketMessage.js";
-import WebSocketReply from "../../adapters/webSocket/WebSocketReply/WebSocketReply.js";
+import WebSocketMessage from "../../PubSub/WebSocket/WebSocketMessage/WebSocketMessage.js";
+import WebSocketReply from "../../PubSub/WebSocket/WebSocketReply/WebSocketReply.js";
 
 export const objectRepliesForMessages = {
     [WebSocketMessage.switchOnLed]: WebSocketReply.switchedOnLed,

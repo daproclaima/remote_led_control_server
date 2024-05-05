@@ -1,9 +1,9 @@
-import {wssConfig} from "./src/adapters/configuration/wsServer/wssConfig.js";
-import WebSocketServer from "./src/adapters/webSocket/WebSocketServer/WebSocketServer.js";
-import WinstonLoggerImplementation from "./src/Logger/loggerImplementations/winston/WinstonLoggerImplementation.js";
-import {winstonConfiguration} from "./src/Logger/loggerImplementations/winston/winstonConfiguration.js";
+import {wssConfig} from "./src/PubSub/WebSocket/WsWebSocketImplementation/wssConfig.js";
+import WebSocketServer from "./src/PubSub/WebSocket/WebSocketServer/WebSocketServer.js";
+import WinstonLoggerImplementation from "./src/Logger/WinstonImplementation/WinstonLoggerImplementation.js";
+import {winstonConfiguration} from "./src/Logger/WinstonImplementation/winstonConfiguration.js";
 import WsWebSocketImplementation
-    from "./src/adapters/webSocket/webSocketImplementations/WsWebSocketImplementation/WsWebSocketImplementation.js";
+    from "./src/PubSub/WebSocket/WsWebSocketImplementation/WsWebSocketImplementation.js";
 import LoggerFacade from "./src/Logger/LoggerFacade.js";
 
 try {
