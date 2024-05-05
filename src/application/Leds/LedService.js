@@ -1,4 +1,4 @@
-import FeatureToggler from "../FeatureToggler/FeatureToggler.js";
+import FeatureToggler from "../../FeatureToggler/FeatureToggler.js";
 import {FEATURE_GPIO} from "../../constants/Features/FEATURES.js";
 import LedAdapter from "../../adapters/raspberry/led/LedAdapter/LedAdapter.js";
 import DriverGpioRpiGpioImplementation

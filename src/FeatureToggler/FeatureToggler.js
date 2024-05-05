@@ -1,6 +1,6 @@
 import 'dotenv/config'
-import {FEATURE_GPIO} from "../../constants/Features/FEATURES.js";
-import {OS_TYPE} from "../../constants/OperatingSystems/OS.js";
+import {FEATURE_GPIO} from "../constants/Features/FEATURES.js";
+import {OS_TYPE} from "../constants/OperatingSystems/OS.js";
 
 export default class FeatureToggler {
     features = {
