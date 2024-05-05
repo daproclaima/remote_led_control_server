@@ -1,4 +1,4 @@
-export default class Logger {
+export default class LoggerFacade {
     logger = null
 
     get logger() {
