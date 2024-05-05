@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --no-expose-wasm index.js",
-    "blink": "node --no-expose-wasm src/adapters/raspberry/led/blink.js"
+    "blink": "node --no-expose-wasm src/LED/blink.js"
   },
   "keywords": [],
   "author": "",

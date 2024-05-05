@@ -1,4 +1,4 @@
-export default class LedAdapter {
+export default class LedFacade {
     driver = null
     logger = null
 
@@ -9,19 +9,19 @@ export default class LedAdapter {
 
     switchOnLed() {
         const isLedLit = this.driver.switchOnLed()
-        this.logger.log({level: 'info', message: 'LedAdapter.switchOnLed executed'})
+        this.logger.log({level: 'info', message: 'LedFacade.switchOnLed executed'})
 
         return isLedLit
     }
 
     switchOffLed() {
         const isLedLit = this.driver.switchOffLed()
-        this.logger.log({level: 'info', message: 'LedAdapter.switchOffLed executed'})
+        this.logger.log({level: 'info', message: 'LedFacade.switchOffLed executed'})
         return isLedLit
     }
 
     tearUpGpios() {
         this.driver.tearUpGpios()
-        this.logger.log({level: 'info', message: 'LedAdapter.tearUpGpios executed'})
+        this.logger.log({level: 'info', message: 'LedFacade.tearUpGpios executed'})
     }
 }
