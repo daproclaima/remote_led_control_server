@@ -1,6 +1,6 @@
 import Informant from "../../application/Informant/Informant.js";
 import LedController from "../../LED/LedController/LedController.js";
-import Errors from "../../constants/Errors/Errors.js";
+import Errors from "../../Errors/Errors.js";
 import PubSubMessage from "../PubSubMessage/PubSubMessage.js";
 import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../constants/Informant/REPLIES.js";
 
