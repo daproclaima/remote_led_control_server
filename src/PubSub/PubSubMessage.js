@@ -2,7 +2,7 @@ import {
     WSS_MESSAGE_SWITCH_OFF_LED,
     WSS_MESSAGE_SWITCH_ON_LED,
     WSS_MESSAGE_TERMINATE_GPIO_LED
-} from "../../constants/Informant/MESSAGES.js";
+} from "./Informant/MESSAGES.js";
 
 
 export default class PubSubMessage {

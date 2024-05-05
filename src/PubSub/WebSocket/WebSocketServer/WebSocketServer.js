@@ -1,8 +1,8 @@
 import Informant from "../../Informant/Informant.js";
 import LedController from "../../../LED/LedController.js";
 import Errors from "../../../Errors/Errors.js";
-import PubSubMessage from "../../PubSubMessage/PubSubMessage.js";
-import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../../constants/Informant/REPLIES.js";
+import PubSubMessage from "../../PubSubMessage.js";
+import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../Informant/REPLIES.js";
 
 export default class WebSocketServer {
     logger = null

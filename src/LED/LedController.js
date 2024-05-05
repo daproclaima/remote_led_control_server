@@ -1,5 +1,5 @@
 import LedService from "./LedService.js";
-import PubSubMessage from "../PubSub/PubSubMessage/PubSubMessage.js";
+import PubSubMessage from "../PubSub/PubSubMessage.js";
 
 export default class LedController {
     logger = null

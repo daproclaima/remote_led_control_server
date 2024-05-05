@@ -1,4 +1,4 @@
-import PubSubMessage from "../PubSubMessage/PubSubMessage.js";
+import PubSubMessage from "../PubSubMessage.js";
 
 export const objectAcceptableMessages = {
     [PubSubMessage.switchOnLed]: PubSubMessage.switchOnLed,

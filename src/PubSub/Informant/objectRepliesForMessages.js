@@ -1,5 +1,5 @@
-import PubSubMessage from "../PubSubMessage/PubSubMessage.js";
-import PubSubReply from "../PubSubReply/PubSubReply.js";
+import PubSubMessage from "../PubSubMessage.js";
+import PubSubReply from "../PubSubReply.js";
 
 export const objectRepliesForMessages = {
     [PubSubMessage.switchOnLed]: PubSubReply.switchedOnLed,

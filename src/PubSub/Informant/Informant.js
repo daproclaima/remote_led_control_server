@@ -1,6 +1,6 @@
 import {objectAcceptableMessages} from "./objectAcceptableMessages.js";
 import {objectRepliesForMessages} from "./objectRepliesForMessages.js";
-import {WSS_REPLY_UNEXPECTED_MESSAGE} from "../../constants/Informant/REPLIES.js";
+import {WSS_REPLY_UNEXPECTED_MESSAGE} from "./REPLIES.js";
 
 export default class Informant {
     #objectAcceptedMessages = objectAcceptableMessages
