@@ -2,7 +2,7 @@
 
 import {Gpio} from "onoff";
 
-export default class LedDriverGpioOnOffImplementation {
+export default class DriverGpioOnOffImplementation {
     driver = null
     logger = null
 

@@ -2,7 +2,7 @@ import FeatureToggler from "../../FeatureToggler/FeatureToggler.js";
 import {FEATURE_GPIO} from "../../FeatureToggler/FEATURES.js";
 import LedFacade from "../../LED/LedFacade/LedFacade.js";
 import DriverGpioRpiGpioImplementation
-    from "../../LED/LedDriverImplementations/DriverGpioRpiGpioImplementation/DriverGpioRpiGpioImplementation.js";
+    from "../../GPIO/DriverGpioRpiGpioImplementation/DriverGpioRpiGpioImplementation.js";
 
 export default class LedService {
     logger = null
