@@ -1,4 +1,4 @@
-import Informant from "../../application/Informant/Informant.js";
+import Informant from "../Informant/Informant.js";
 import LedController from "../../LED/LedController/LedController.js";
 import Errors from "../../Errors/Errors.js";
 import PubSubMessage from "../PubSubMessage/PubSubMessage.js";
