@@ -1,4 +1,4 @@
-import LedService from "../../application/Leds/LedService.js";
+import LedService from "../LedService.js";
 import PubSubMessage from "../../PubSub/PubSubMessage/PubSubMessage.js";
 
 export default class LedController {
