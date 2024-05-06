@@ -2,63 +2,19 @@
 
 import gpio from 'rpi-gpio'
 
+//  not supported on raspberry pi 5
 export default class DriverGpioRpiGpioImplementation {
     #driver = null
-    logger = null
-    #isLedLit = false
+    #loggerService = null
     isGpioToTearUp = false
-    PIN_12 = 12
     #isExceptionOccured = false
 
-    constructor({logger}) {
-        this.logger = logger
+    constructor({loggerService}) {
+        this.#loggerService = loggerService
         this.#driver = gpio
     }
 
-    switchOnLed() {
-        if (this.#isExceptionOccured === false) {
-            const callbackForGpioExecute = (gpioSession) => {
-                const callback = (gpioSession, value) => {
-                    if (value === false) {
-                        this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: true})
-                        this.#setIsLedLit(gpioSession)
-                    }
-                    this.#listenOnUncaughtException()
-                    this.#listenOnExit(gpioSession)
-                }
-
-                this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12, callback})
-            }
-
-            this.#gpioExecute(callbackForGpioExecute)
-        }
-
-        return this.#isLedLit
-    }
-
-    switchOffLed() {
-        if (this.#isExceptionOccured === false) {
-            const callbackForGpioExecute = gpioSession => {
-                const callback = (gpioSession, value) => {
-                    if (value === true) {
-                        this.#writeInGpioPin({gpioSession, pinId: this.PIN_12, pinValue: false})
-                        this.#setIsLedLit(gpioSession)
-                    }
-
-                    this.#listenOnUncaughtException()
-                    this.#listenOnExit(gpioSession)
-                }
-
-                this.#isLedLit = this.#readFromGpioPin({gpioSession, pinId: this.PIN_12, callback})
-            }
-
-            this.#gpioExecute(callbackForGpioExecute)
-        }
-
-        return this.#isLedLit
-    }
-
-    tearUpGpios(gpioSessionFromGpioExecuteMethod) {
+    tearDownGpios(gpioSessionFromGpioExecuteMethod) {
         this.isGpioToTearUp = true
 
         const callback = gpioSession => {
@@ -73,7 +29,7 @@ export default class DriverGpioRpiGpioImplementation {
                 } else {
                     this.logger.log({
                         level: 'info',
-                        message: `LedDriverGpioRpiGpioImplementation.tearUpGpios executed`
+                        message: 'LedDriverGpioRpiGpioImplementation.tearUpGpios executed'
                     })
                 }
             });
@@ -107,11 +63,11 @@ export default class DriverGpioRpiGpioImplementation {
 
     #listenOnUncaughtException = () => {
         process.once('uncaughtException', err => {
-            console.log('Caught exception: ' + err);
+            console.log(`Caught exception: ${err}`);
 
             this.logger.log({
                 level: 'error',
-                message: 'LedController.listenOnUncaughtException Caught exception : ' + err
+                message: `LedController.listenOnUncaughtException Caught exception : ${err}`
             });
 
             // this.#isExceptionOccured = true;
@@ -126,9 +82,9 @@ export default class DriverGpioRpiGpioImplementation {
             if (this.#isExceptionOccured) {
                 this.logger.log({
                     level: 'info',
-                    message: 'LedController.#listenOnExit Exception occured'
+                    message: 'LedDriver.#listenOnExit Exception occured'
                 });
-            } else this.logger.log({level: 'info', message: 'LedController.listenOnExit Kill signal received'});
+            } else this.logger.log({level: 'info', message: 'LedDriver.listenOnExit Kill signal received'});
 
             this.tearUpGpios(gpioSession)
         });

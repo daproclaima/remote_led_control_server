@@ -1,35 +1,69 @@
-import FeatureToggler from "../FeatureToggler/FeatureToggler.js";
-import {FEATURE_GPIO} from "../FeatureToggler/FEATURES.js";
-import LedFacade from "./LedFacade.js";
-import DriverGpioRpiGpioImplementation
-    from "../GPIO/DriverGpioRpiGpioImplementation/DriverGpioRpiGpioImplementation.js";
+import LedDriver from "./LedDriver.js";
+import PubSubMessage from "../PubSub/PubSubMessage.js";
+import {
+    WSS_REPLY_FAILED_SWITCH_OFF_LED,
+    WSS_REPLY_FAILED_SWITCH_ON_LED, WSS_REPLY_FAILED_TERMINATE_GPIO_LED, WSS_REPLY_SWITCHED_OFF_LED,
+    WSS_REPLY_SWITCHED_ON_LED, WSS_REPLY_TERMINATED_GPIO_LED
+} from "../PubSub/Informant/REPLIES.js";
 
 export default class LedService {
-    logger = null
+    #loggerService = null
+    #ledDriver = null
+    #response = null
 
-    ledAdapter = null
-
-    constructor({logger}) {
-        const featureToggle = new FeatureToggler()
-        const isFeatureGpioEnabled = featureToggle.getIsFeatureEnabled(FEATURE_GPIO)
-
-        if (isFeatureGpioEnabled) {
-            const ledDriverGpio = new DriverGpioRpiGpioImplementation({logger})
-            this.ledAdapter = new LedFacade({logger, ledDriverImplementation: ledDriverGpio})
+    constructor({loggerService, gpioService}) {
+        if(!loggerService.log) {
+            throw new Error('loggerService provided in PubSubServerService constructor has no log method')
         }
 
-        this.logger = logger
+        this.#loggerService = loggerService
+        this.#ledDriver = new LedDriver({loggerService, gpioService})
+        this.#ledDriver.start()
     }
 
-    switchOnLed() {
-        return this.ledAdapter?.switchOnLed()
-    }
+    handleMessage = (message) => {
+        // https://github.com/winstonjs/winston#logging-levels
+        this.#loggerService.log({level: 'info', message: `ledDriver.handleMessage data : ' + ${message}`})
 
-    switchOffLed() {
-        return this.ledAdapter?.switchOffLed()
-    }
+        switch (message) {
+            case PubSubMessage.switchOnLed:
+                this.#ledDriver.switchOnLed()
 
-    tearUpGpios() {
-        this.ledAdapter.tearUpGpios()
+                this.#response = WSS_REPLY_SWITCHED_ON_LED
+
+                if(!this.#ledDriver.getIsLedLit()) {
+                    this.#response = WSS_REPLY_FAILED_SWITCH_ON_LED
+                }
+                break
+
+            case PubSubMessage.switchOffLed:
+                this.#ledDriver.switchOffLed()
+
+                this.#response = WSS_REPLY_SWITCHED_OFF_LED
+
+                if(this.#ledDriver.getIsLedLit()) {
+                    this.#response = WSS_REPLY_FAILED_SWITCH_OFF_LED
+                }
+                break
+
+            case PubSubMessage.terminateGpioLed:
+                this.#ledDriver.tearDownGpios()
+
+                this.#response = WSS_REPLY_TERMINATED_GPIO_LED
+
+                if(this.#ledDriver.getIsGpioOn()) {
+                    this.#response = WSS_REPLY_FAILED_TERMINATE_GPIO_LED
+                }
+                break;
+
+            default: {
+                const errorMessage = `LedService.handleMessage data : ' + ${message}`
+                this.#loggerService.log({level: 'info', message: errorMessage})
+                throw new Error(errorMessage)
+            }
+
+        }
+
+        return this.#response
     }
 }

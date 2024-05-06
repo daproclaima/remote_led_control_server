@@ -1,107 +1,65 @@
 import Informant from "../../Informant/Informant.js";
-import LedController from "../../../LED/LedController.js";
+import LedDriver from "../../../LED/LedDriver.js";
 import Errors from "../../../Errors/Errors.js";
 import PubSubMessage from "../../PubSubMessage.js";
 import {WSS_REPLY_FAILED_SWITCH_OFF_LED, WSS_REPLY_FAILED_SWITCH_ON_LED} from "../../Informant/REPLIES.js";
 
 export default class WebSocketServer {
-    logger = null
-    webSocketImplementation = null
-    lastMessage = null
-    lastRequest = null
-    lastClient = null
-    lastError = null
-    nextReply = null
+    #loggerService = null
+    #webSocketImplementation = null
+    #lastMessage = null
+    #lastReply = null
+    #lastRequest = null
+    #lastClient = null
+    #lastError = null
+    #nextReply = null
 
     get lastMessage() {
-        return this.webSocketImplementation.lastMessage
+        return this.#webSocketImplementation.lastMessage
     }
 
     set lastMessage(message) {
-        this.lastMessage = message
+        this.#lastMessage = message
     }
 
     get lastRequest() {
-        return this.webSocketImplementation.lastRequest
+        return this.#webSocketImplementation.lastRequest
     }
 
     set lastRequest(request) {
-        this.lastRequest = request
+        this.#lastRequest = request
     }
 
     get lastClient() {
-        return this.webSocketImplementation.lastClient
+        return this.#webSocketImplementation.lastClient
     }
 
     set lastClient(client) {
-        this.lastClient = client
+        this.#lastClient = client
     }
 
     get lastError() {
-        return this.webSocketImplementation.lastError
+        return this.#webSocketImplementation.lastError
     }
 
     set nextReply(reply) {
-        this.nextReply = reply
+        this.#nextReply = reply
     }
 
     get nextReply() {
-        return this.nextReply
+        return this.#nextReply
     }
 
     set lastError(error) {
-        this.lastError = error
+        this.#lastError = error
     }
 
-    get logger() {
-        return this.logger
+    get loggerService() {
+        return this.#loggerService
     }
 
     listen = () => {
-        this.webSocketImplementation.listen(this)
-        return this
-    }
-
-    parseLastMessage = () => {
-        // 2 - security : is message clean
-
-        // 1 - Logic : is such message expected and then reply
-        this.logger.log({
-            level: 'info',
-            message: 'WebSocketServer parseLastMessage this.lastMessage: ' + this.lastMessage,
-        })
-
-
-        const informant = new Informant({logger: this.logger})
-        informant.checkIsMessageAcceptable(this.lastMessage)
-
-        this.logger.log({
-            level: 'info',
-            message: 'WebSocketServer.parseLastMessage informant.isMessageAcceptable : ' + informant.isMessageAcceptable
-        })
-
-        if (informant.isMessageAcceptable) {
-            const ledController = new LedController({logger: this.logger})
-
-            ledController.handleMessage(this.lastMessage)
-            const isLedLit = ledController.isLedLit
-
-            this.logger.log({
-                level: 'info',
-                message: 'WebSocketServer.parseLastMessage ledController.isLedLit : ' + ledController.isLedLit
-            })
-
-            this.nextReply = informant.getReplyAccordingToMessage(this.lastMessage)
-
-            if (this.lastMessage === PubSubMessage.switchOnLed && isLedLit === false) {
-                this.nextReply = WSS_REPLY_FAILED_SWITCH_ON_LED
-            }
-
-            if (this.lastMessage === PubSubMessage.switchOffLed && isLedLit === true) {
-                this.nextReply = WSS_REPLY_FAILED_SWITCH_OFF_LED
-            }
-        }
-
+        this.#webSocketImplementation.listen()
         return this
     }
 
@@ -112,25 +70,25 @@ export default class WebSocketServer {
             throw new Error(Errors.WebSocketServer.EMPTY_INFORMANT_REPLY.code)
         }
 
-        if (this.nextReply) {
-            currentReply = this.nextReply
-            this.nextReply = null
+        if (this.#nextReply) {
+            currentReply = this.#nextReply
+            this.#nextReply = null
         }
 
-        this.webSocketImplementation.reply(webSocketConnection, currentReply)
-        this.lastReply = currentReply
+        this.#webSocketImplementation.reply(webSocketConnection, currentReply)
+        this.#lastReply = currentReply
 
         return this
     }
 
     closeConnection = () => {
-        this.webSocketImplementation.closeConnection()
+        this.#webSocketImplementation.closeConnection()
 
         return this
     }
 
-    constructor({webSocketImplementation, logger}) {
-        this.webSocketImplementation = webSocketImplementation
-        this.logger = logger
+    constructor({webSocketImplementation, loggerService}) {
+        this.#webSocketImplementation = webSocketImplementation
+        this.#loggerService = loggerService
     }
 }
