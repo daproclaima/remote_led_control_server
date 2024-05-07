@@ -1,8 +1,8 @@
-import {wssConfig} from "./src/PubSub/WebSocket/WebSocketServer/WsWebSocketImplementation/wssConfig.js";
+import {wssConfig} from "./src/PubSub/WebSocket/WsWebSocketImplementation/wssConfig.js";
 import WinstonLoggerImplementation from "./src/Logger/WinstonImplementation/WinstonLoggerImplementation.js";
 import {winstonConfiguration} from "./src/Logger/WinstonImplementation/winstonConfiguration.js";
 import WsWebSocketImplementation
-    from "./src/PubSub/WebSocket/WebSocketServer/WsWebSocketImplementation/WsWebSocketImplementation.js";
+    from "./src/PubSub/WebSocket/WsWebSocketImplementation/WsWebSocketImplementation.js";
 import {ApplicationService} from "./src/application/ApplicationService.js";
 import LoggerService from "./src/Logger/LoggerService.js";
 import PubSubServerService from "./src/PubSub/PubSubServerService.js";
