@@ -9,10 +9,13 @@ import PubSubServerService from "./src/PubSub/PubSubServerService.js";
 import {GpioService} from "./src/GPIO/GpioService.js";
 import DriverGpioOnOffImplementation from "./src/GPIO/DriverGpioOnOffImplementation/DriverGpioOnOffImplementation.js";
 
-try {
+let winstonLoggerImplementation = null;
+let loggerService = null;
+
+const startApplication = () => {
     // https://github.com/winstonjs/winston#logging-levels
-    const winstonLoggerImplementation = new WinstonLoggerImplementation({winstonConfiguration})
-    const loggerService = new LoggerService({loggerImplementation: winstonLoggerImplementation})
+    winstonLoggerImplementation = new WinstonLoggerImplementation({winstonConfiguration})
+    loggerService = new LoggerService({loggerImplementation: winstonLoggerImplementation})
 
     const pubSubServerImplementation = new WsWebSocketImplementation({wssConfig, loggerService})
     const pubSubServerService = new PubSubServerService({pubSubServerImplementation, loggerService})
@@ -24,8 +27,18 @@ try {
 
     applicationService.start();
 
-    process.on('SIGTERM', () => applicationService.stop());
-    process.on('SIGINT', () => applicationService.stop());
+    process.on('SIGTERM', () => {
+        applicationService.stop()
+        process.exit(0);
+    });
+    process.on('SIGINT', () => {
+        applicationService.stop()
+        process.exit(0);
+    });
+}
+
+try {
+    startApplication()
 } catch (error) {
-    console.error('index.js: ', error)
+    loggerService?.log({level: "error", message: `index.js :${error}`}) || console.error(`index.js error : ${error}`)
 }

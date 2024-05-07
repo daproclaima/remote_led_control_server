@@ -1,22 +1,20 @@
 import LedDriver from "./LedDriver.js";
+
+import { bark, cluck, meow, moo, snort, trumpet, bark2 } from "console-dog-nodejs"
+import {WSS_MESSAGE_SWITCH_OFF_LED, WSS_MESSAGE_SWITCH_ON_LED, WSS_MESSAGE_TERMINATE_GPIO_LED} from "./MESSAGES.js";
 import {
     WSS_REPLY_FAILED_SWITCH_OFF_LED,
-    WSS_REPLY_FAILED_SWITCH_ON_LED,
-    WSS_REPLY_FAILED_TERMINATE_GPIO_LED,
+    WSS_REPLY_FAILED_SWITCH_ON_LED, WSS_REPLY_FAILED_TERMINATE_GPIO_LED,
     WSS_REPLY_SWITCHED_OFF_LED,
-    WSS_REPLY_SWITCHED_ON_LED,
-    WSS_REPLY_TERMINATED_GPIO_LED, WSS_REPLY_UNEXPECTED_MESSAGE
+    WSS_REPLY_SWITCHED_ON_LED, WSS_REPLY_TERMINATED_GPIO_LED, WSS_REPLY_UNEXPECTED_MESSAGE
 } from "./REPLIES.js";
-import {WSS_MESSAGE_SWITCH_OFF_LED, WSS_MESSAGE_SWITCH_ON_LED, WSS_MESSAGE_TERMINATE_GPIO_LED} from "./MESSAGES.js";
-
-import { bark, cluck, meow, mew, snort, trumpet } from "console-dog-nodejs"
 
 export default class LedService {
     #loggerService = null
     #ledDriver = null
     #pubSubServerService = null
     #enumValidMessages = null
-    #enumValidResponse = null
+    #enumValidResponses = null
 
     constructor({loggerService, gpioService, pubSubServerService}) {
         if(!loggerService.log) {
@@ -27,19 +25,19 @@ export default class LedService {
         this.#pubSubServerService = pubSubServerService
         this.#ledDriver = new LedDriver({loggerService, gpioService})
         this.#enumValidMessages = Object.freeze({
-            [WSS_MESSAGE_SWITCH_ON_LED] : WSS_MESSAGE_SWITCH_ON_LED,
-            [WSS_MESSAGE_SWITCH_OFF_LED] : WSS_MESSAGE_SWITCH_OFF_LED,
-            [WSS_MESSAGE_TERMINATE_GPIO_LED] : WSS_MESSAGE_TERMINATE_GPIO_LED,
+            WSS_MESSAGE_SWITCH_ON_LED,
+            WSS_MESSAGE_SWITCH_OFF_LED,
+            WSS_MESSAGE_TERMINATE_GPIO_LED,
         })
 
-        this.#enumValidMessages = Object.freeze({
-            [WSS_REPLY_SWITCHED_ON_LED] : WSS_REPLY_SWITCHED_ON_LED,
-            [WSS_REPLY_SWITCHED_OFF_LED] : WSS_REPLY_SWITCHED_OFF_LED,
-            [WSS_REPLY_FAILED_SWITCH_ON_LED] : WSS_REPLY_FAILED_SWITCH_ON_LED,
-            [WSS_REPLY_FAILED_SWITCH_OFF_LED] : WSS_REPLY_FAILED_SWITCH_OFF_LED,
-            [WSS_REPLY_UNEXPECTED_MESSAGE] : WSS_REPLY_UNEXPECTED_MESSAGE,
-            [WSS_REPLY_TERMINATED_GPIO_LED] : WSS_REPLY_TERMINATED_GPIO_LED,
-            [WSS_REPLY_FAILED_TERMINATE_GPIO_LED] : WSS_REPLY_FAILED_TERMINATE_GPIO_LED,
+        this.#enumValidResponses = Object.freeze({
+            WSS_REPLY_SWITCHED_ON_LED,
+            WSS_REPLY_SWITCHED_OFF_LED,
+            WSS_REPLY_FAILED_SWITCH_ON_LED,
+            WSS_REPLY_FAILED_SWITCH_OFF_LED,
+            WSS_REPLY_UNEXPECTED_MESSAGE,
+            WSS_REPLY_TERMINATED_GPIO_LED,
+            WSS_REPLY_FAILED_TERMINATE_GPIO_LED,
         })
     }
 
@@ -52,75 +50,68 @@ export default class LedService {
             throw new Error('LedService.start: this.#pubSubServerService has no listen method')
         }
 
+        // on mac causes: Warning: epoll is built for Linux and not intended for usage on Darwin. error: ApplicationService.start caught error: Error: ENOENT: no such file or directory, open '/sys/class/gpio/export'
         this.#ledDriver.start()
+
         this.#pubSubServerService.listen({
-            callbackOnConnection: () => cluck('connection'),
+            callbackOnConnection: () => trumpet('connection'),
             callbackOnMessage: this.#callbackOnMessage,
             callbackOnError: () => meow('error'),
-            callbackOnOpen :() => mew('open'),
+            callbackOnOpen :() => moo('open'),
             callbackOnClose: () => snort('close')
         })
     }
 
-    #callbackOnMessage = (socket, data) => {
+    #callbackOnMessage = ({data}) => {
         // https://github.com/winstonjs/winston#logging-levels
-        this.#loggerService.log({level: 'info', message: `ledDriver.callbackOnMessage data : ' + ${JSON.stringify(data)}`})
-        this.#loggerService.log({level: 'info', message: `ledDriver.callbackOnMessage data : ' + ${JSON.stringify(socket)}`})
+        this.#loggerService.log({level: 'info', message: `ledDriver.#callbackOnMessage data : ${data}`})
+        bark2(`ledDriver.callbackOnMessage data : ${data}`)
 
-        let responsePayload = WSS_REPLY_UNEXPECTED_MESSAGE
+
+        let responsePayload = this.#enumValidResponses.WSS_REPLY_UNEXPECTED_MESSAGE
 
         switch (data) {
-            case WSS_MESSAGE_SWITCH_ON_LED:
+            case this.#enumValidMessages.WSS_MESSAGE_SWITCH_ON_LED:
+                cluck(this.#enumValidMessages.WSS_MESSAGE_SWITCH_ON_LED)
                 this.#ledDriver.switchOnLed()
 
-                responsePayload = WSS_REPLY_SWITCHED_ON_LED
+                responsePayload = this.#enumValidResponses.WSS_REPLY_SWITCHED_ON_LED
 
                 if(!this.#ledDriver.getIsLedLit()) {
-                    responsePayload = WSS_REPLY_FAILED_SWITCH_ON_LED
+                    responsePayload = this.#enumValidMessages.WSS_REPLY_FAILED_SWITCH_ON_LED
                 }
                 break
 
-            case WSS_MESSAGE_SWITCH_OFF_LED:
+            case this.#enumValidMessages.WSS_MESSAGE_SWITCH_OFF_LED:
+                bark(this.#enumValidMessages.WSS_MESSAGE_SWITCH_OFF_LED)
                 this.#ledDriver.switchOffLed()
 
-                responsePayload = WSS_REPLY_SWITCHED_OFF_LED
+                responsePayload = this.#enumValidResponses.WSS_REPLY_SWITCHED_OFF_LED
 
                 if(this.#ledDriver.getIsLedLit()) {
-                    responsePayload = WSS_REPLY_FAILED_SWITCH_OFF_LED
+                    responsePayload = this.#enumValidMessages.WSS_REPLY_FAILED_SWITCH_OFF_LED
                 }
                 break
 
-            case WSS_MESSAGE_TERMINATE_GPIO_LED:
-                bark(WSS_REPLY_TERMINATED_GPIO_LED)
-
+            case this.#enumValidMessages.WSS_MESSAGE_TERMINATE_GPIO_LED:
+                snort(this.#enumValidMessages.WSS_MESSAGE_TERMINATE_GPIO_LED)
                 this.#ledDriver.tearDownGpios()
 
-                responsePayload = WSS_REPLY_TERMINATED_GPIO_LED
+                responsePayload = this.#enumValidResponses.WSS_REPLY_TERMINATED_GPIO_LED
 
                 if(this.#ledDriver.getIsGpioOn()) {
-                    responsePayload = WSS_REPLY_FAILED_TERMINATE_GPIO_LED
+                    responsePayload = this.#enumValidMessages.WSS_REPLY_FAILED_TERMINATE_GPIO_LED
                 }
                 break;
 
             default: {
-                this.#loggerService.log({level: 'info', message: `LedService.callbackOnMessage data was not recognized : ${JSON.stringify(data)}; socket data : ${JSON.stringify(socket)}`})
-                bark(WSS_REPLY_UNEXPECTED_MESSAGE)
+                this.#loggerService.log({level: 'info', message: `LedService.callbackOnMessage data was not recognized : ${data}. Expected messages are of ${JSON.stringify(this.#enumValidMessages)}`})
             }
 
-        }
-
-        bark(responsePayload)
-
-        if(!this.#getIsResponseToSendValid(responsePayload)) {
-            this.#loggerService.log({level: 'info', message: `LedService.callbackOnMessage response payload is not valid : ${responsePayload}`})
         }
 
         this.#pubSubServerService.reply(responsePayload)
 
         return this
-    }
-
-    #getIsResponseToSendValid = (response) => {
-        return !!this.#enumValidResponse[response]
     }
 }

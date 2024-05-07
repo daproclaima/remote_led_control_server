@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer';
 export default class PubSubServerService {
     #loggerService = null
     #pubSubServerImplementation = null
@@ -21,7 +22,21 @@ export default class PubSubServerService {
     }
 
     listen = ({callbackOnConnection = () => {}, callbackOnError = () => {}, callbackOnOpen = () => {}, callbackOnMessage = () => {}, callbackOnClose = () => {}}) => {
-        this.#pubSubServerImplementation.listen({callbackOnConnection, callbackOnError, callbackOnOpen, callbackOnMessage, callbackOnClose})
+        this.#pubSubServerImplementation.listen({
+            callbackOnConnection,
+            callbackOnError,
+            callbackOnOpen,
+            callbackOnMessage: ({data, isBinary}) => {
+                if(isBinary || Buffer.from(data)) {
+                    data = data.toString()
+                }
+
+                console.log(`PubSubServerService.listen -> callbackOnMessage isBinary : ${isBinary}`)
+                console.log(`PubSubServerService.listen -> callbackOnMessage data : ${data}`)
+
+                return callbackOnMessage({data})
+            },
+            callbackOnClose})
 
         this.#loggerService.log({
             level: 'info',

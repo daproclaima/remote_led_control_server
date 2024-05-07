@@ -33,7 +33,7 @@ export default class WsWebSocketImplementation {
 
             connection.isAlive = true;
 
-            const socket = {request, client, connection}
+            const socket = {request, client}
 
             callbackOnConnection({socket})
 
@@ -48,10 +48,10 @@ export default class WsWebSocketImplementation {
                 callbackOnOpen({socket})
                 this.#connection.send("CONNECTION OPEN")
             });
-            connection.on(MESSAGE, (data) => {
+            connection.on(MESSAGE, (data, isBinary) => {
                 // this.#sanitizeDataReceived(data)
-                this.#loggerService.log({level: 'error', message: `WsWebSocketImplementation.listen listened message : ${JSON.stringify(data)}`})
-                callbackOnMessage({socket, data})
+                this.#loggerService.log({level: 'info', message: `WsWebSocketImplementation.listen listened message : ${data}`})
+                callbackOnMessage({socket, data, isBinary})
             })
             connection.on(CLOSE, () => {
                 this.#loggerService.log({
@@ -75,6 +75,7 @@ export default class WsWebSocketImplementation {
     }
 
     reply = (data) => {
+        console.log('data : ', data)
         if(!data) {
             throw new Error("WsWebSocketImplementation.reply : data is nullish.")
         }
@@ -92,8 +93,13 @@ export default class WsWebSocketImplementation {
     }
 
     closeConnection = () => {
-        this.#connection.terminate()
-        this.#loggerService.log({level: 'info', message: 'WsWebSocketImplementation.closeConnection executed successfully; server terminated'})
+        if(this.#connection) {
+            this.#connection.terminate()
+            this.#loggerService.log({level: 'info', message: 'WsWebSocketImplementation.closeConnection executed successfully; server terminated'})
+
+        } else {
+            this.#loggerService.log({level: 'info', message: 'WsWebSocketImplementation.closeConnection had no connection open. skip connection terminate()'})
+        }
 
         return this
     }

@@ -38,7 +38,5 @@ export class ApplicationService {
     stop = () => {
         this.#gpioService.tearDownGpios()
         this.#pubSubServerService.closeConnection()
-
-        return false
     }
 }
