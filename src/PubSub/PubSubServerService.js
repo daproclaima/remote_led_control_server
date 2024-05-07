@@ -1,78 +1,55 @@
 export default class PubSubServerService {
     #loggerService = null
-    #pubSubServerFacade = null
-    #lastMessage = null
-    #lastReply = null
-    #nextReply = null
+    #pubSubServerImplementation = null
 
-    constructor({pubSubServerFacade, loggerService}) {
-        if(!pubSubServerFacade.listen) {
-            throw new Error('pubSubServerFacade provided in PubSubServerService constructor has no listen method')
+    constructor({pubSubServerImplementation, loggerService}) {
+        if(!pubSubServerImplementation.listen) {
+            throw new Error('pubSubServerImplementation provided in PubSubServerService constructor has no listen method')
         }
 
         if(!loggerService.log) {
             throw new Error('loggerService provided in PubSubServerService constructor has no log method')
         }
 
-        this.#pubSubServerFacade = pubSubServerFacade
+        this.#pubSubServerImplementation = pubSubServerImplementation
         this.#loggerService = loggerService
-    }
 
-    getConnection() {
-        return this.#pubSubServerFacade.getConnection()
-    }
-
-    getLastMessage() {
-        return this.#pubSubServerFacade.getLastMessage()
-    }
-
-    getLastRequest() {
-        return this.#pubSubServerFacade.getLastRequest()
-    }
-
-    getLastClient() {
-        return this.#pubSubServerFacade.getLastClient()
-    }
-
-    getLastError() {
-        return this.#pubSubServerFacade.getLastError()
-    }
-
-    setNextReply(reply) {
-        this.#nextReply = reply
-    }
-
-    getNextReply() {
-        return this.#nextReply
-    }
-
-    getLastReply() {
-        return this.#lastReply
-    }
-
-    getServer() {
-        return this.#pubSubServerFacade
-    }
-
-    listen = () => {
-        this.#pubSubServerFacade.listen()
-        
-        this.#lastMessage = this.#pubSubServerFacade.getLastMessage();
         this.#loggerService.log({
             level: 'info',
-            message: `PubSubServerService parseLastMessage : ${this.lastMessage}`,
+            message: 'PubSubServerService instance was created successfully',
+        })
+    }
+
+    listen = ({callbackOnConnection = () => {}, callbackOnError = () => {}, callbackOnOpen = () => {}, callbackOnMessage = () => {}, callbackOnClose = () => {}}) => {
+        this.#pubSubServerImplementation.listen({callbackOnConnection, callbackOnError, callbackOnOpen, callbackOnMessage, callbackOnClose})
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'PubSubServerService.listen was executed successfully',
         })
 
-        return this.#lastMessage
+        return this
     }
 
     reply = (response) => {
-        this.#pubSubServerFacade.reply(response)
-        this.#lastReply = response
+        this.#pubSubServerImplementation.reply(response)
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'PubSubServerService.reply was executed successfully',
+        })
+
+        return this
     }
 
     closeConnection = () => {
-        this.#pubSubServerFacade.closeConnection()
+        this.#pubSubServerImplementation.closeConnection()
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'PubSubServerService.closeConnection was executed successfully',
+        })
+
         return this
     }
 }
