@@ -24,27 +24,27 @@ export default class WsWebSocketImplementation {
         this.#loggerService = loggerService
     }
 
-    get getConnection() {
+    getConnection() {
         return this.#connection
     }
 
-    get getLastMessage() {
+    getLastMessage() {
         return this.#message
     }
 
-    get getLastRequest() {
+    getLastRequest() {
         return this.#request
     }
 
-    get getLastClient() {
+    getLastClient() {
         return this.#client
     }
 
-    get getLastError() {
+    getLastError() {
         return this.#error
     }
 
-    listen = () => {
+    listen = ({callbackOnError, callbackOnConnection, callbackOnOpen, callbackOnClose}) => {
         this.#server.on(CONNECTION, (webSocketConnection, request, client) => {
             this.#loggerService.log({
                 level: 'info',
@@ -57,22 +57,48 @@ export default class WsWebSocketImplementation {
 
             this.#connection = webSocketConnection
 
+            const socket = {webSocketConnection, request, client, server: this.#server}
+            callbackOnConnection({socket})
+
+            this.#connection.on(ERROR, (error) => {
+                this.#loggerService.log({
+                    level: 'info',
+                    message: `WsWebSocketImplementation.listened error : ${error}`
+                })
+                callbackOnError({socket, error})
+                this.#error = JSON.parse(error)
+            });
+
             this.#connection.on(OPEN, () => {
                 this.#connection.send("CONNECTION OPENED")
+                this.#loggerService.log({
+                    level: 'info',
+                    message: "WsWebSocketImplementation.listened open"
+                })
+                callbackOnOpen({socket})
             });
-            this.#connection.on(MESSAGE, (data) => {
-                this.#message = JSON.parse(data);
-            })
-            this.#connection.on(CLOSE, (webSocketConnection) => {
-                webSocketConnection.isAlive = false
-                this.closeConnection()
 
-                this.#connection = webSocketConnection;
+            this.#connection.on(MESSAGE, (data) => {
+                console.log('received: %s', data);
+                this.#message = JSON.parse(data);
+                this.#loggerService.log({
+                    level: 'info',
+                    message: "WsWebSocketImplementation.listened message"
+                })
+                callbackOnClose({socket, data})
+            })
+
+            this.#connection.on(CLOSE, () => {
+                this.#loggerService.log({
+                    level: 'info',
+                    message: "WsWebSocketImplementation.listened close"
+                })
+                this.#connection.isAlive = false
+                socket.connection = {...this.#connection}
+                callbackOnClose({socket})
             });
-            this.#connection.on(ERROR, (errorObject) => {
-                this.#error = JSON.parse(errorObject)
-                this.#loggerService.log({level: 'error', message: this.#error})
-            });
+
+            
         });
 
         return this
@@ -94,7 +120,6 @@ export default class WsWebSocketImplementation {
     closeConnection = () => {
         this.#connection.terminate()
         this.#loggerService.log({level: 'info', message: 'WsWebSocketImplementation server terminated'})
-
         return this
     }
 }

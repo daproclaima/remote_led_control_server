@@ -1,4 +1,5 @@
-import {LINE_NUMBERS, LINE_TYPE} from "../GPIO/DriverLibGpiodImplementation/DriverLibGpiodImplementation.js";
+import {LINE_NUMBERS} from "../GPIO/LINE_NUMBERS.js"
+import {LINE_TYPES} from "../GPIO/LINE_TYPES.js"
 
 const LED_GPIO_LINE_NUMBER = LINE_NUMBERS.TWELVE
 
@@ -21,8 +22,8 @@ export default class LedDriver {
         }
     }
 
-    #addLedToChip = (lineNumber) => {
-        this.#gpioService.addActiveLine({lineNumber, type: LINE_TYPE.READ, defaultValue: 0, consumerServiceName: 'LedDriver'})
+    #addLedToChip = ({lineNumber, type= LINE_TYPES.WRITE, defaultValue = 0, consumerServiceName = 'LedDriver'}) => {
+        this.#gpioService.addActiveLine({lineNumber, type, defaultValue, consumerServiceName})
     }
 
     tearDownGpios = () => {
@@ -36,7 +37,7 @@ export default class LedDriver {
     switchOnLed() {
         this.#gpioService.setLineValue({LED_GPIO_LINE_NUMBER, value: 1})
     }
-    //
+    
     switchOffLed() {
         this.#gpioService.setLineValue({LED_GPIO_LINE_NUMBER, value: 0})
     }

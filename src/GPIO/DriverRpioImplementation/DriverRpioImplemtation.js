@@ -1,10 +1,22 @@
 import { version, Chip, Line } from "node-libgpiod";
+import rpio from 'rpio'
+
+export const LINE_TYPE = {
+    READ: "READ",
+    WRITE: "WRITE"
+}
+
+export const LINE_NUMBERS = {
+    SEVEN: 7,
+    TWELVE: 12
+}
 
 export class DriverLibGpiodImplementation {
     #loggerService = null
     #chip = null
     #arrayActiveLines = []
     #isGpioOn = false
+    
     constructor({loggerService, chipNumber = 0}) {
         this.#loggerService = loggerService
         this.#chip = new Chip(chipNumber);

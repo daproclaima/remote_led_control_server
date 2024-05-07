@@ -3,7 +3,7 @@ import {objectRepliesForMessages} from "./objectRepliesForMessages.js";
 import {WSS_REPLY_UNEXPECTED_MESSAGE} from "./REPLIES.js";
 
 export default class Informant {
-    static #defaultResponse = WSS_REPLY_UNEXPECTED_MESSAGE
+    static defaultResponse = WSS_REPLY_UNEXPECTED_MESSAGE
     #objectAcceptedMessages = objectAcceptableMessages
 
     #objectRepliesForMessages = objectRepliesForMessages
@@ -36,7 +36,7 @@ export default class Informant {
     }
 
     prepareResponse = (message) => {
-        let response = this.#defaultResponse
+        let response = this.defaultResponse
 
         if (!this.#objectRepliesForMessages[message]) {
             const errorMessage = 'The message provided to Informant.prepareResponse is not valid'

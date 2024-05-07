@@ -27,8 +27,18 @@ export class ApplicationService {
 
     start = () => {
         try {
-            this.#lastMessage = this.#pubSubServerService.listen()
-            this.handleLastMessage()
+            const pubSubServer = this.#pubSubServerService.getServer()
+            
+            pubSubServer.listen(connection => {
+                const lastMessage = this.#pubSubServerService.getLastMessage()
+                
+                this.#loggerService.log({level: "info", message: `Application.start last message : ${JSON.stringify(lastMessage)}`})
+                
+                if(lastMessage) {
+                    this.handleLastMessage(lastMessage)
+                }
+
+            })
         } catch(error) {
             this.#loggerService.log({
                 level: 'error',
@@ -42,10 +52,9 @@ export class ApplicationService {
         this.#pubSubServerService.closeConnection()
     }
 
-    #parseLastMessage = () => {
-        this.#informantService.checkIsMessageAcceptable(this.#lastMessage)
-        
-        if (!this.#informantService.getIsMessageAcceptable()) {
+    #parseLastMessage = (message) => {
+        this.#lastMessage = message
+        if (!this.#informantService.getIsMessageAcceptable(message)) {
             const errorMessage = `ApplicationService.parseLastMessage last message is incorrect : ${this.#lastMessage}`
             this.#loggerService.log({
                 level: 'error',
@@ -55,8 +64,8 @@ export class ApplicationService {
         }
     }
 
-    handleLastMessage = () => {
-        this.#parseLastMessage()
+    handleLastMessage = (message) => {
+        this.#parseLastMessage(message)
         // todo should call a LedService using a LedDriver and a GPIO Driver
         const ledService = new LedService({loggerService: this.#loggerService, gpioService: this.#gpioService})
         const ledServiceResponse = ledService.handleMessage(this.#lastMessage)
