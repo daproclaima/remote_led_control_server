@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "console-dog-nodejs": "^1.0.22",
     "dotenv": "^16.3.1",
     "onoff": "^6.0.3",
     "rpi-gpio": "^2.1.7",

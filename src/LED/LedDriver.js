@@ -1,7 +1,7 @@
 import {LINE_NUMBERS} from "../GPIO/LINE_NUMBERS.js"
 import {LINE_TYPES} from "../GPIO/LINE_TYPES.js"
 
-const LED_GPIO_LINE_NUMBER = LINE_NUMBERS.TWELVE
+const LED_GPIO_LINE_NUMBER = "TWELVE"
 
 export default class LedDriver {
     #loggerService = null
@@ -18,7 +18,7 @@ export default class LedDriver {
 
     start = () => {
         if(this.#gpioService.getIsGpioOn()) {
-            this.#addLedToChip(LED_GPIO_LINE_NUMBER)
+            this.#addLedToChip({lineNumber: LED_GPIO_LINE_NUMBER})
         }
     }
 

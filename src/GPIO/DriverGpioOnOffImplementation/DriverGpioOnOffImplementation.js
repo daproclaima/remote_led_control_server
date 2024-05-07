@@ -11,9 +11,9 @@ export default class DriverGpioOnOffImplementation {
     #arrayGpioDecorators = []
     #isGpioOn = false
     
-    constructor({loggerService, chipNumber = 0}) {
+    constructor({loggerService, chipNumber = 1}) {
         this.#loggerService = loggerService
-        this.#chip = null
+        this.#chip = chipNumber
         this.#isGpioOn = true;
     }
 
@@ -21,26 +21,26 @@ export default class DriverGpioOnOffImplementation {
         return this.#isGpioOn
     }
 
-    addline = ({lineNumber = null, type = null, defaultValue = null, consumerServiceName = null, chip = 0}) => {
+    addActiveLine = ({lineNumber = null, type = null, defaultValue = null, consumerServiceName = null, chip = 0}) => {
         if(!LINE_TYPES[type]) {
-            const errorMessage = "DriverGpioOnOffImplementation.addline error: type should be READ or WRITE"
+            const errorMessage = "DriverGpioOnOffImplementation.addActiveLine error: type should be READ or WRITE"
             this.#loggerService.log({ level: "info", message: errorMessage})
             throw new Error(errorMessage)
         }
         if(!LINE_NUMBERS[lineNumber]) {
-            const errorMessage = `DriverGpioOnOffImplementation.addline error: lineNumber should be one of ${LINE_NUMBERS}`
+            const errorMessage = `DriverGpioOnOffImplementation.addActiveLine error: lineNumber should be one of ${JSON.stringify(LINE_NUMBERS)} while given ${lineNumber}`
             this.#loggerService.log({ level: "info", message: errorMessage})
             throw new Error(errorMessage)
         }
         if(!this.#chip) {
-            const errorMessage = "DriverGpioOnOffImplementation.addline error: chip is not instanced."
+            const errorMessage = "DriverGpioOnOffImplementation.addActiveLine error: chip is not instanced."
             this.#loggerService.log({ level: "info", message: errorMessage})
             throw new Error(errorMessage)
         }
 
         const line = {gpio: null, lineNumber, type, defaultValue, consumerServiceName}
 
-        const {gpio} = line;
+        let {gpio} = line;
 
         if(type === LINE_TYPES.WRITE) {
             gpio = new Gpio(lineNumber, 'out');
@@ -77,7 +77,7 @@ export default class DriverGpioOnOffImplementation {
             throw new Error(errorMessage)
         }
 
-        const line = this.#findline(lineNumber)
+        const line = this.#findLine(lineNumber)
 
         if (line.type !== LINE_TYPES.READ) {
             const errorMessage = "DriverGpioOnOffImplementation.readLine error: requested line is not a READ TYPE."
@@ -95,7 +95,7 @@ export default class DriverGpioOnOffImplementation {
             throw new Error(errorMessage)
         }
 
-        const line = this.#findline(lineNumber)
+        const line = this.#findLine(lineNumber)
 
         if (line.type !== LINE_TYPES.READ) {
             const errorMessage = "DriverGpioOnOffImplementation.readLine error: requested line is not a READ TYPE."
@@ -113,7 +113,7 @@ export default class DriverGpioOnOffImplementation {
             throw new Error(errorMessage)
         }
 
-        const line = this.#findline(lineNumber)
+        const line = this.#findLine(lineNumber)
 
         if (line.type !== LINE_TYPES.WRITE) {
             const errorMessage = "DriverGpioOnOffImplementation.readLine error: requested line is not a WRITE TYPE."
@@ -134,7 +134,7 @@ export default class DriverGpioOnOffImplementation {
             throw new Error(errorMessage)
         }
 
-        const line = this.#findline(lineNumber)
+        const line = this.#findLine(lineNumber)
 
         if (line.type !== LINE_TYPES.WRITE) {
             const errorMessage = "DriverGpioOnOffImplementation.readLine error: requested line is not a WRITE TYPE."
@@ -148,7 +148,7 @@ export default class DriverGpioOnOffImplementation {
         return this
     }
 
-    #findline = (lineNumber) => {
+    #findLine = (lineNumber) => {
         const line = this.#arrayGpioDecorators.find(candidateLine => candidateLine.lineNumber === lineNumber)
 
         if(!line) {
@@ -167,7 +167,7 @@ export default class DriverGpioOnOffImplementation {
             throw new Error(errorMessage)
         }
 
-        const line = this.#findline(lineNumber)
+        const line = this.#findLine(lineNumber)
 
         line.release()
 

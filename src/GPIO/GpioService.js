@@ -31,4 +31,8 @@ export class GpioService {
         return this
 
     }
+
+    getIsGpioOn = () => {
+        return this.#gpioDriver.getIsGpioOn()
+    }
 }
