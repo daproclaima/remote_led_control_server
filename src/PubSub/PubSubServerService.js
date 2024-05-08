@@ -19,6 +19,11 @@ export default class PubSubServerService {
             level: 'info',
             message: 'PubSubServerService instance was created successfully',
         })
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'PubSubServerService.constructor was executed successfully',
+        })
     }
 
     listen = ({callbackOnConnection = () => {}, callbackOnError = () => {}, callbackOnOpen = () => {}, callbackOnMessage = () => {}, callbackOnClose = () => {}}) => {
@@ -31,10 +36,22 @@ export default class PubSubServerService {
                     data = data.toString()
                 }
 
-                console.log(`PubSubServerService.listen -> callbackOnMessage isBinary : ${isBinary}`)
-                console.log(`PubSubServerService.listen -> callbackOnMessage data : ${data}`)
+                this.#loggerService.log({
+                    level: 'info',
+                    message: `PubSubServerService.listen -> callbackOnMessage isBinary : ${isBinary}`,
+                })
 
-                return callbackOnMessage({data})
+                this.#loggerService.log({
+                    level: 'info',
+                    message: `PubSubServerService.listen -> callbackOnMessage data : ${data}`,
+                })
+
+                this.#loggerService.log({
+                    level: 'info',
+                    message: 'PubSubServerService.listen -> callbackOnMessage was executed successfully',
+                })
+
+                const result = callbackOnMessage({data})
             },
             callbackOnClose})
 

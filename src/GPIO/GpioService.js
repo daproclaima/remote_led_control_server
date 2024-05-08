@@ -10,24 +10,82 @@ export class GpioService {
         this.#loggerService = loggerService
         this.#gpioDriver = gpioDriver
     }
+
+    test = () => {
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.test was executed successfully',
+        })
+    }
+
     tearDownGpios = () => {
         this.#gpioDriver.tearDownGpios()
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.tearDownGpios was executed successfully',
+        })
     }
 
     addActiveLine = ({lineNumber = null, type = null, defaultValue = null, consumerServiceName = null}) => {
+        if(lineNumber === null) {
+            throw new Error("GpioService.addActiveLine error: no lineNumber provided")
+        }
+        if(type === null) {
+            throw new Error("GpioService.addActiveLine error: no type provided")
+        }
+        if(consumerServiceName === null) {
+            throw new Error("GpioService.addActiveLine error: no consumerServiceName provided")
+        }
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.addActiveLine began',
+        })
+
         this.#gpioDriver = this.#gpioDriver.addActiveLine({lineNumber, type, defaultValue, consumerServiceName})
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.addActiveLine was executed successfully',
+        })
         return this
     }
+
     getLineValue = (lineNumber) => {
+        if(lineNumber === null) {
+            throw new Error("GpioService.getLineValue error: no lineNumber provided")
+        }
+    
         return this.#gpioDriver.getLineValue(lineNumber)
     }
 
     setLineValue = ({lineNumber = null, value = null}) => {
+        if(lineNumber === null ||  value === undefined) {
+            throw new Error("GpioService.setLineValue error: no lineNumber provided")
+        }
+        if(value === null || value === undefined) {
+            throw new Error("GpioService.setLineValue error: no value provided")
+        }
+
         this.#gpioDriver = this.#gpioDriver.setLineValue({lineNumber, value})
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.setLineValue was executed successfully',
+        })
+
         return this
     }
+
     releaseLine = (lineNumber = null) => {
         this.#gpioDriver = this.#gpioDriver.releaseLine(lineNumber)
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'GpioService.releaseLine was executed successfully',
+        })
+
         return this
 
     }

@@ -1,7 +1,7 @@
 import {LINE_NUMBERS} from "../GPIO/LINE_NUMBERS.js"
 import {LINE_TYPES} from "../GPIO/LINE_TYPES.js"
 
-const LED_GPIO_LINE_NUMBER = "TWELVE"
+const LED_GPIO_LINE_NUMBER = "SIXTEEN"
 
 export default class LedDriver {
     #loggerService = null
@@ -14,20 +14,57 @@ export default class LedDriver {
 
         this.#loggerService = loggerService
         this.#gpioService = gpioService
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver instance was constructed successfully',
+        })
     }
 
     start = () => {
-        if(this.#gpioService.getIsGpioOn()) {
-            this.#addLedToChip({lineNumber: LED_GPIO_LINE_NUMBER})
+        if(!this.#gpioService.getIsGpioOn()) {
+            throw new Error("LedDriver.start error: gpio is not accessible")
         }
+        
+        this.#addLedToChip({lineNumber: LED_GPIO_LINE_NUMBER, type: LINE_TYPES.WRITE, defaultValue: 0, consumerServiceName: 'LedDriver'})
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver.start was executed successfully',
+        })
+
+        return this
     }
 
-    #addLedToChip = ({lineNumber, type= LINE_TYPES.WRITE, defaultValue = 0, consumerServiceName = 'LedDriver'}) => {
-        this.#gpioService.addActiveLine({lineNumber, type, defaultValue, consumerServiceName})
+    #addLedToChip = ({lineNumber = LED_GPIO_LINE_NUMBER, type = LINE_TYPES.WRITE, defaultValue = 0, consumerServiceName = 'LedDriver'}) => {
+        try {
+
+            this.#gpioService.addActiveLine({lineNumber, type, defaultValue, consumerServiceName})
+        } catch(error) {
+            this.#loggerService.log({
+                level: 'error',
+                message: `LedDriver.#addLedToChip error: ${error}`,
+            })
+
+            throw new Error(error.message)
+        }
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver.#addLedToChip was executed successfully',
+        })
+
+        return this
     }
 
     tearDownGpios = () => {
-        return this.#gpioService.tearDownGpios()
+        this.#gpioService.tearDownGpios()
+        
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver.tearDownGpios was executed successfully',
+        })
+
+        return this
     }
 
     getIsLedLit = () => {
@@ -35,10 +72,22 @@ export default class LedDriver {
     }
 
     switchOnLed() {
-        this.#gpioService.setLineValue({LED_GPIO_LINE_NUMBER, value: 1})
+        this.#gpioService.setLineValue({lineNumber: LED_GPIO_LINE_NUMBER, value: 1})
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver.switchOnLed was executed successfully',
+        })
+
+        return this
     }
     
     switchOffLed() {
-        this.#gpioService.setLineValue({LED_GPIO_LINE_NUMBER, value: 0})
+        this.#gpioService.setLineValue({lineNumber: LED_GPIO_LINE_NUMBER, value: 0})
+        this.#loggerService.log({
+            level: 'info',
+            message: 'LedDriver.switchOffLed was executed successfully',
+        })
+
+        return this
     }
 }

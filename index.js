@@ -41,4 +41,5 @@ try {
     startApplication()
 } catch (error) {
     loggerService?.log({level: "error", message: `index.js :${error}`}) || console.error(`index.js error : ${error}`)
+    process.exit(0);
 }
