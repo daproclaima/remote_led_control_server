@@ -1,8 +1,7 @@
-import {MicrophoneDriver} from "./MicrophoneDriver.js";
 export default class MicrophoneService {
     #loggerService = null
     #gpioService = null
-    #microphoneDriver = null
+    #microphoneImplementation = null
 
     constructor({gpioService, loggerService, microphoneImplementation}) {
         if(!gpioService.addActiveLine) {
@@ -16,7 +15,7 @@ export default class MicrophoneService {
         this.#gpioService = gpioService
         this.#loggerService = loggerService
 
-        this.#microphoneDriver = new MicrophoneDriver({gpioService, loggerService, microphoneImplementation})
+        this.#microphoneImplementation = microphoneImplementation
 
         this.#loggerService.log({
             level: 'info',
@@ -34,7 +33,7 @@ export default class MicrophoneService {
       callbackOnResumeComplete = () => {},
       callbackOnData = ({data}) => {}
     }) => {
-        this.#microphoneDriver.listen({
+        this.#microphoneImplementation.listen({
             callbackOnstartComplete,
             callbackOnError,
             callbackOnPauseComplete,
@@ -63,5 +62,17 @@ export default class MicrophoneService {
         })
 
         return this
+    }
+
+    stop = () => {
+        this.#microphoneImplementation.stop();
+    }
+
+    pause = () => {
+        this.#microphoneImplementation.pause();
+    }
+
+    resume = () => {
+        this.#microphoneImplementation.resume();
     }
 }

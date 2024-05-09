@@ -12,7 +12,7 @@ export class MicrophoneMicImplementation {
     }
     #server = null
     #inputStream = null
-    #outputFileStream = null
+    #outputFileStream = fs.WriteStream('output.raw');
 
 
     constructor({loggerService}) {
@@ -21,11 +21,7 @@ export class MicrophoneMicImplementation {
         }
 
         this.#server = mic(this.#configuration)
-        let inputStream = this.#server.getAudioStream();
 
-        this.#outputFileStream = fs.WriteStream('output.raw');
-
-        this.#inputStream = inputStream.pipe(this.#outputFileStream);
 
         this.#loggerService.log({
             level: 'info',
@@ -43,6 +39,10 @@ export class MicrophoneMicImplementation {
         callbackOnResumeComplete = () => {},
         callbackOnData = ({data}) => data
     }) => {
+        let inputStream = this.#server.getAudioStream();
+
+        this.#inputStream = inputStream.pipe(this.#outputFileStream);
+
         this.#inputStream.on('startComplete', () => {
             this.#loggerService.log({
                 level: 'error',
@@ -170,4 +170,15 @@ export class MicrophoneMicImplementation {
         })
     }
 
+    stop = () => {
+        this.#server.stop();
+    }
+
+    pause = () => {
+        this.#server.pause();
+    }
+
+    resume = () => {
+        this.#server.resume();
+    }
 }
