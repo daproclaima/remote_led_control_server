@@ -64,7 +64,7 @@ export class GpioService {
         if(lineNumber === null ||  value === undefined) {
             throw new Error("GpioService.setLineValue error: no lineNumber provided")
         }
-        if(value === null || value === undefined) {
+        if(value === null) {
             throw new Error("GpioService.setLineValue error: no value provided")
         }
 

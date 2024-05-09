@@ -5,8 +5,9 @@ export class ApplicationService {
     #pubSubServerService = null;
     #gpioService = null;
     #ledService = null;
+    #microphoneService = null;
 
-    constructor({loggerService, pubSubServerService, gpioService}) {
+    constructor({loggerService, pubSubServerService, gpioService, microphoneService}) {
         if(!pubSubServerService.listen) {
             throw new Error('pubSubServerImplementation provided in PubSubServerService constructor has no listen method')
         }
@@ -18,12 +19,19 @@ export class ApplicationService {
         this.#loggerService = loggerService
         this.#pubSubServerService = pubSubServerService
         this.#gpioService = gpioService
+        this.#microphoneService = microphoneService
     }
 
 
     start = () => {
         try {
-            this.#ledService = new LedService({loggerService: this.#loggerService, gpioService: this.#gpioService, pubSubServerService: this.#pubSubServerService})
+            this.#ledService = new LedService({
+                loggerService: this.#loggerService,
+                gpioService: this.#gpioService,
+                pubSubServerService: this.#pubSubServerService,
+                microphoneService: this.#microphoneService
+            })
+
             this.#ledService.start()
         } catch(error) {
             this.#loggerService.log({

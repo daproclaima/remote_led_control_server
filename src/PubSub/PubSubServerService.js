@@ -19,11 +19,6 @@ export default class PubSubServerService {
             level: 'info',
             message: 'PubSubServerService instance was created successfully',
         })
-
-        this.#loggerService.log({
-            level: 'info',
-            message: 'PubSubServerService.constructor was executed successfully',
-        })
     }
 
     listen = ({callbackOnConnection = () => {}, callbackOnError = () => {}, callbackOnOpen = () => {}, callbackOnMessage = () => {}, callbackOnClose = () => {}}) => {
@@ -51,7 +46,7 @@ export default class PubSubServerService {
                     message: 'PubSubServerService.listen -> callbackOnMessage was executed successfully',
                 })
 
-                const result = callbackOnMessage({data})
+                callbackOnMessage({data})
             },
             callbackOnClose})
 

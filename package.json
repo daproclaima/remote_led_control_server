@@ -18,6 +18,7 @@
   "dependencies": {
     "console-dog-nodejs": "^1.0.22",
     "dotenv": "^16.3.1",
+    "mic": "^2.1.2",
     "onoff": "^6.0.3",
     "rpi-gpio": "^2.1.7",
     "winston": "^3.10.0",
