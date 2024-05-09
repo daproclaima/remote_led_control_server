@@ -7,7 +7,7 @@ export class ApplicationService {
     #ledService = null;
     #microphoneService = null;
 
-    constructor({loggerService, pubSubServerService, gpioService, microphoneService}) {
+    constructor({loggerService, pubSubServerService, gpioService, microphoneService, ledService}) {
         if(!pubSubServerService.listen) {
             throw new Error('pubSubServerImplementation provided in PubSubServerService constructor has no listen method')
         }
@@ -16,22 +16,24 @@ export class ApplicationService {
             throw new Error('loggerService provided in PubSubServerService constructor has no log method')
         }
 
+        if(!ledService.start) {
+            throw new Error('ApplicationService.constructor error: provided ledService has no start method')
+        }
+
         this.#loggerService = loggerService
         this.#pubSubServerService = pubSubServerService
         this.#gpioService = gpioService
         this.#microphoneService = microphoneService
-    }
+        this.#ledService = ledService
 
+        this.#loggerService.log({
+            level: 'info',
+            message: 'ApplicationService.constructor executed successfully',
+        })
+    }
 
     start = () => {
         try {
-            this.#ledService = new LedService({
-                loggerService: this.#loggerService,
-                gpioService: this.#gpioService,
-                pubSubServerService: this.#pubSubServerService,
-                microphoneService: this.#microphoneService
-            })
-
             this.#ledService.start()
         } catch(error) {
             this.#loggerService.log({
@@ -45,6 +47,7 @@ export class ApplicationService {
 
     stop = () => {
         this.#gpioService.tearDownGpios()
+        this.#microphoneService.stop()
         this.#pubSubServerService.closeConnection()
     }
 }

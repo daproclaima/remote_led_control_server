@@ -17,8 +17,9 @@ export default class LedDriver {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver instance was constructed successfully',
+            message: 'LedDriver.constructor executed successfully',
         })
+
     }
 
     start = () => {
@@ -29,7 +30,7 @@ export default class LedDriver {
         this.#addLedToChip({lineNumber: LED_GPIO_LINE_NUMBER, type: LINE_TYPES.WRITE, defaultValue: 0, consumerServiceName: 'LedDriver'})
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver.start was executed successfully',
+            message: 'LedDriver.start executed successfully',
         })
 
         return this
@@ -50,7 +51,7 @@ export default class LedDriver {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver.#addLedToChip was executed successfully',
+            message: 'LedDriver.#addLedToChip executed successfully',
         })
 
         return this
@@ -61,7 +62,7 @@ export default class LedDriver {
         
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver.tearDownGpios was executed successfully',
+            message: 'LedDriver.tearDownGpios executed successfully',
         })
 
         return this
@@ -75,7 +76,7 @@ export default class LedDriver {
         this.#gpioService.setLineValue({lineNumber: LED_GPIO_LINE_NUMBER, value: 1})
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver.switchOnLed was executed successfully',
+            message: 'LedDriver.switchOnLed executed successfully',
         })
 
         return this
@@ -85,7 +86,7 @@ export default class LedDriver {
         this.#gpioService.setLineValue({lineNumber: LED_GPIO_LINE_NUMBER, value: 0})
         this.#loggerService.log({
             level: 'info',
-            message: 'LedDriver.switchOffLed was executed successfully',
+            message: 'LedDriver.switchOffLed executed successfully',
         })
 
         return this

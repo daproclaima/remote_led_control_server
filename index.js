@@ -10,6 +10,7 @@ import {GpioService} from "./src/GPIO/GpioService.js";
 import DriverGpioOnOffImplementation from "./src/GPIO/DriverGpioOnOffImplementation/DriverGpioOnOffImplementation.js";
 import {MicrophoneMicImplementation} from "./src/Microphone/MicrophoneMicImplementation.js";
 import MicrophoneService from "./src/Microphone/MicrophoneService.js";
+import LedService from "./src/LED/LedService.js";
 
 let winstonLoggerImplementation = null;
 let loggerService = null;
@@ -28,7 +29,20 @@ const startApplication = () => {
     const microphoneImplementation = new MicrophoneMicImplementation({loggerService})
     const microphoneService = new MicrophoneService({gpioService, loggerService, microphoneImplementation})
 
-    const applicationService = new ApplicationService({loggerService, pubSubServerService, gpioService, microphoneService})
+    const ledService = new LedService({
+        loggerService,
+        gpioService,
+        pubSubServerService,
+        microphoneService,
+    })
+
+    const applicationService = new ApplicationService({
+        loggerService,
+        pubSubServerService,
+        gpioService,
+        microphoneService,
+        ledService
+    })
 
     applicationService.start();
 

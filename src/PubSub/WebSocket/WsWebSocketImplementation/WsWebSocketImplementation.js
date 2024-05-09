@@ -68,7 +68,7 @@ export default class WsWebSocketImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'WsWebSocketImplementation.listen was executed successfully'
+            message: 'WsWebSocketImplementation.listen executed successfully'
         })
 
         return this

@@ -41,14 +41,14 @@ export default class LedService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'LedService.constructor was executed successfully',
+            message: 'LedService.constructor executed successfully',
         })
     }
 
     test = () => {
         this.#loggerService.log({
             level: 'info',
-            message: 'LedService.test was executed successfully',
+            message: 'LedService.test executed successfully',
         })
     }
 
@@ -89,7 +89,7 @@ export default class LedService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'LedService.start was executed successfully',
+            message: 'LedService.start executed successfully',
         })
     }
 
@@ -140,7 +140,7 @@ export default class LedService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'LedService.#manipulateLed was executed successfully',
+            message: 'LedService.#manipulateLed executed successfully',
         })
 
         return this

@@ -43,7 +43,7 @@ export default class PubSubServerService {
 
                 this.#loggerService.log({
                     level: 'info',
-                    message: 'PubSubServerService.listen -> callbackOnMessage was executed successfully',
+                    message: 'PubSubServerService.listen -> callbackOnMessage executed successfully',
                 })
 
                 callbackOnMessage({data})
@@ -52,7 +52,7 @@ export default class PubSubServerService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'PubSubServerService.listen was executed successfully',
+            message: 'PubSubServerService.listen executed successfully',
         })
 
         return this
@@ -63,7 +63,7 @@ export default class PubSubServerService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'PubSubServerService.reply was executed successfully',
+            message: 'PubSubServerService.reply executed successfully',
         })
 
         return this
@@ -74,7 +74,7 @@ export default class PubSubServerService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'PubSubServerService.closeConnection was executed successfully',
+            message: 'PubSubServerService.closeConnection executed successfully',
         })
 
         return this

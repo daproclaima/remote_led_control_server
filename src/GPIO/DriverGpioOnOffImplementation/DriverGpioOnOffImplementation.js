@@ -18,7 +18,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.constructor was executed successfully',
+            message: 'DriverGpioOnOffImplementation.constructor executed successfully',
         })
     }
 
@@ -27,7 +27,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.getIsGpioOn was executed successfully',
+            message: 'DriverGpioOnOffImplementation.getIsGpioOn executed successfully',
         })
 
         return isOn
@@ -85,7 +85,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.addActiveLine was executed successfully',
+            message: 'DriverGpioOnOffImplementation.addActiveLine executed successfully',
         })
 
         this.#loggerService.log({
@@ -113,14 +113,14 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.getLineValue was executed successfully',
+            message: 'DriverGpioOnOffImplementation.getLineValue executed successfully',
         })
 
         const value = line.readSync();
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.getLineValue was executed successfully',
+            message: 'DriverGpioOnOffImplementation.getLineValue executed successfully',
         })
 
         return value
@@ -145,7 +145,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.getAsyncLineValue was executed successfully',
+            message: 'DriverGpioOnOffImplementation.getAsyncLineValue executed successfully',
         })
 
         return value
@@ -179,7 +179,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.setLineValue was executed successfully',
+            message: 'DriverGpioOnOffImplementation.setLineValue executed successfully',
         })
 
         return this
@@ -216,7 +216,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.setAsyncLineValue was executed successfully',
+            message: 'DriverGpioOnOffImplementation.setAsyncLineValue executed successfully',
         })
 
         return this
@@ -233,7 +233,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.#findLine was executed successfully',
+            message: 'DriverGpioOnOffImplementation.#findLine executed successfully',
         })
 
         return line
@@ -254,7 +254,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.releaseLine was executed successfully',
+            message: 'DriverGpioOnOffImplementation.releaseLine executed successfully',
         })
 
         return this
@@ -272,7 +272,7 @@ export default class DriverGpioOnOffImplementation {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'DriverGpioOnOffImplementation.tearDownGpios was executed successfully',
+            message: 'DriverGpioOnOffImplementation.tearDownGpios executed successfully',
         })
 
         return this

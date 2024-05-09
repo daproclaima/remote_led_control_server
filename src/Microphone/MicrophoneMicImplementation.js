@@ -20,6 +20,7 @@ export class MicrophoneMicImplementation {
             throw new Error('loggerService provided in MicrophoneMicImplementation constructor has no log method')
         }
 
+        this.#loggerService = loggerService
         this.#server = mic(this.#configuration)
 
 

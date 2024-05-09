@@ -19,7 +19,7 @@ export default class MicrophoneService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'MicrophoneService instance was created successfully',
+            message: 'MicrophoneService.constructor executed successfully',
         })
     }
 
@@ -49,7 +49,7 @@ export default class MicrophoneService {
 
                 this.#loggerService.log({
                     level: 'info',
-                    message: 'MicrophoneService.listen -> callbackOnData was executed successfully',
+                    message: 'MicrophoneService.listen -> callbackOnData executed successfully',
                 })
 
                 callbackOnData({data})
@@ -58,7 +58,7 @@ export default class MicrophoneService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'MicrophoneService.listen was executed successfully',
+            message: 'MicrophoneService.listen executed successfully',
         })
 
         return this

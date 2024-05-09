@@ -9,12 +9,17 @@ export class GpioService {
 
         this.#loggerService = loggerService
         this.#gpioDriver = gpioDriver
+
+        this.#loggerService.log({
+            level: 'info',
+            message: 'ApplicationService.constructor executed successfully',
+        })
     }
 
     test = () => {
         this.#loggerService.log({
             level: 'info',
-            message: 'GpioService.test was executed successfully',
+            message: 'GpioService.test executed successfully',
         })
     }
 
@@ -23,7 +28,7 @@ export class GpioService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'GpioService.tearDownGpios was executed successfully',
+            message: 'GpioService.tearDownGpios executed successfully',
         })
     }
 
@@ -47,7 +52,7 @@ export class GpioService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'GpioService.addActiveLine was executed successfully',
+            message: 'GpioService.addActiveLine executed successfully',
         })
         return this
     }
@@ -72,7 +77,7 @@ export class GpioService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'GpioService.setLineValue was executed successfully',
+            message: 'GpioService.setLineValue executed successfully',
         })
 
         return this
@@ -83,7 +88,7 @@ export class GpioService {
 
         this.#loggerService.log({
             level: 'info',
-            message: 'GpioService.releaseLine was executed successfully',
+            message: 'GpioService.releaseLine executed successfully',
         })
 
         return this
