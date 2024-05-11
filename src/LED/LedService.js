@@ -69,23 +69,23 @@ export default class LedService {
         this.#ledDriver.start()
 
         this.#pubSubServerService.listen({
-            manipulateLed: this.#manipulateLed,
+            callbackOnMessage: this.#manipulateLed,
             // callbackOnConnection: () => {},
             // callbackOnError: () => {},
             // callbackOnOpen :() => {},
             // callbackOnClose: () => {}
         })
         
-        this.#microphoneService.listen({
-            callbackOnData: this.#manipulateLed
-            // callbackOnstartComplete: () => {},
-            // callbackOnError: ({error}) => {},
-            // callbackOnPauseComplete: () => {},
-            // callbackOnStopComplete: () => {},
-            // callbackOnSilence: () => {},
-            // callbackOnProcessExitComplete: () => {},
-            // callbackOnResumeComplete: () => {},
-        })
+        // this.#microphoneService.listen({
+        //     callbackOnData: this.#manipulateLed
+        //     // callbackOnstartComplete: () => {},
+        //     // callbackOnError: ({error}) => {},
+        //     // callbackOnPauseComplete: () => {},
+        //     // callbackOnStopComplete: () => {},
+        //     // callbackOnSilence: () => {},
+        //     // callbackOnProcessExitComplete: () => {},
+        //     // callbackOnResumeComplete: () => {},
+        // })
 
         this.#loggerService.log({
             level: 'info',
