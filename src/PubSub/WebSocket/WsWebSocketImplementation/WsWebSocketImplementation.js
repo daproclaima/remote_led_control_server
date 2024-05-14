@@ -24,7 +24,7 @@ export default class WsWebSocketImplementation {
         return this.#server
     }
 
-    listen = ({callbackOnConnection = () => {}, callbackOnError =  () => {}, callbackOnOpen =  () => {}, callbackOnMessage =  () => {}, callbackOnClose =  () => {}}) => {
+    listen = ({callbackOnConnection = () => {}, callbackOnError =  () => {}, callbackOnOpen =  () => {}, callbackOnMessage = () => {}, callbackOnClose =  () => {}}) => {
         this.#server.on(CONNECTION, (connection, request, client) => {
             this.#loggerService.log({
                 level: 'info',

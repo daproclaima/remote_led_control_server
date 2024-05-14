@@ -1,8 +1,8 @@
-import {wssConfig} from "./src/PubSub/WebSocket/WsWebSocketImplementation/wssConfig.js";
+// import {wssConfig} from "./src/PubSub/WebSocket/WsWebSocketImplementation/wssConfig.js";
 import WinstonLoggerImplementation from "./src/Logger/WinstonImplementation/WinstonLoggerImplementation.js";
 import {winstonConfiguration} from "./src/Logger/WinstonImplementation/winstonConfiguration.js";
-import WsWebSocketImplementation
-    from "./src/PubSub/WebSocket/WsWebSocketImplementation/WsWebSocketImplementation.js";
+// import WsWebSocketImplementation
+//     from "./src/PubSub/WebSocket/WsWebSocketImplementation/WsWebSocketImplementation.js";
 import {ApplicationService} from "./src/application/ApplicationService.js";
 import LoggerService from "./src/Logger/LoggerService.js";
 import PubSubServerService from "./src/PubSub/PubSubServerService.js";
@@ -11,6 +11,8 @@ import DriverGpioOnOffImplementation from "./src/GPIO/DriverGpioOnOffImplementat
 import {MicrophoneMicImplementation} from "./src/Microphone/MicrophoneMicImplementation.js";
 import MicrophoneService from "./src/Microphone/MicrophoneService.js";
 import LedService from "./src/LED/LedService.js";
+import MqttMqttImplementation from "./src/PubSub/MQTT/MqttMqttImplementation/MqttMqttImplementation.js";
+import "dotenv/config";
 
 let winstonLoggerImplementation = null;
 let loggerService = null;
@@ -20,7 +22,8 @@ const startApplication = () => {
     winstonLoggerImplementation = new WinstonLoggerImplementation({winstonConfiguration})
     loggerService = new LoggerService({loggerImplementation: winstonLoggerImplementation})
 
-    const pubSubServerImplementation = new WsWebSocketImplementation({wssConfig, loggerService})
+    // const pubSubServerImplementation = new WsWebSocketImplementation({wssConfig, loggerService})
+    const pubSubServerImplementation = new MqttMqttImplementation({loggerService})
     const pubSubServerService = new PubSubServerService({pubSubServerImplementation, loggerService})
 
     const gpioDriver = new DriverGpioOnOffImplementation({loggerService})

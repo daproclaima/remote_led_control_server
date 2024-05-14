@@ -36,5 +36,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
 # medias
 *.raw
+
+#secrets
+*credentials*

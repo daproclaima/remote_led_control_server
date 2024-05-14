@@ -105,18 +105,7 @@ export default class DriverGpioOnOffImplementation {
 
         const line = this.#findLine(lineNumber)
 
-        if (line.type !== LINE_TYPES.READ) {
-            const errorMessage = "DriverGpioOnOffImplementation.getLineValue error: requested line is not a READ TYPE."
-            this.#loggerService.log({ level: "info", message: errorMessage})
-            throw new Error(errorMessage)
-        }
-
-        this.#loggerService.log({
-            level: 'info',
-            message: 'DriverGpioOnOffImplementation.getLineValue executed successfully',
-        })
-
-        const value = line.readSync();
+        const value = line.read();
 
         this.#loggerService.log({
             level: 'info',

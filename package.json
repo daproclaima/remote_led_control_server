@@ -9,19 +9,24 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node --no-expose-wasm index.js",
-    "blink": "node --no-expose-wasm src/LED/blink.js"
+    "start": "node index.js",
+    "dev": "nodemon --inspect index.js",
+    "blink": "node src/LED/blink.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "console-dog-nodejs": "^1.0.22",
-    "dotenv": "^16.3.1",
+    "dotenv": "^16.4.5",
     "mic": "^2.1.2",
+    "mqtt": "^5.5.5",
     "onoff": "^6.0.3",
     "rpi-gpio": "^2.1.7",
     "winston": "^3.10.0",
     "ws": "^8.14.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
   }
 }

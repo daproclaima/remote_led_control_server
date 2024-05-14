@@ -94,20 +94,23 @@ export default class LedService {
     }
 
     #manipulateLed = ({data}) => {
-        // https://github.com/winstonjs/winston#logging-levels
         this.#loggerService.log({level: 'info', message: `ledDriver.#manipulateLed data : ${data}`})
 
+        data = JSON.parse(data)
+        const message = String(Buffer.from(data.message).toString())
+        this.#loggerService.log({level: 'info', message: `ledDriver.#manipulateLed message : ${message}`})
+        
         let responsePayload = this.#enumValidResponses.WSS_REPLY_UNEXPECTED_MESSAGE
 
-        switch (data) {
+        switch (message) {
             case this.#enumValidMessages.WSS_MESSAGE_SWITCH_ON_LED:
                 this.#ledDriver.switchOnLed()
 
                 responsePayload = this.#enumValidResponses.WSS_REPLY_SWITCHED_ON_LED
 
-                // if(!this.#ledDriver.getIsLedLit()) {
-                //     responsePayload = this.#enumValidMessages.WSS_REPLY_FAILED_SWITCH_ON_LED
-                // }
+                if(this.#ledDriver.getIsLedLit()) {
+                    responsePayload = this.#enumValidResponses.WSS_REPLY_FAILED_SWITCH_ON_LED
+                }
                 break
 
             case this.#enumValidMessages.WSS_MESSAGE_SWITCH_OFF_LED:
@@ -115,9 +118,9 @@ export default class LedService {
 
                 responsePayload = this.#enumValidResponses.WSS_REPLY_SWITCHED_OFF_LED
 
-                // if(this.#ledDriver.getIsLedLit()) {
-                //     responsePayload = this.#enumValidMessages.WSS_REPLY_FAILED_SWITCH_OFF_LED
-                // }
+                if(this.#ledDriver.getIsLedLit()) {
+                    responsePayload = this.#enumValidResponses.WSS_REPLY_FAILED_SWITCH_OFF_LED
+                }
                 break
 
             case this.#enumValidMessages.WSS_MESSAGE_TERMINATE_GPIO_LED:
@@ -125,9 +128,9 @@ export default class LedService {
 
                 responsePayload = this.#enumValidResponses.WSS_REPLY_TERMINATED_GPIO_LED
 
-                // if(this.#ledDriver.getIsGpioOn()) {
-                //     responsePayload = this.#enumValidResponses.WSS_REPLY_FAILED_TERMINATE_GPIO_LED
-                // }
+                if(this.#ledDriver.getIsGpioOn()) {
+                    responsePayload = this.#enumValidResponses.WSS_REPLY_FAILED_TERMINATE_GPIO_LED
+                }
                 break;
 
             default: {
@@ -136,7 +139,7 @@ export default class LedService {
 
         }
 
-        this.#pubSubServerService.reply(responsePayload)
+        this.#pubSubServerService.reply({topic: 'LED/CONTROL', message: responsePayload})
 
         this.#loggerService.log({
             level: 'info',
